@@ -37,7 +37,7 @@ use api::category::{categorys, category_new, category_theme_page_list};
 use api::user::{user_info, user_delete, user_update};
 
 fn main() {
-    ::std::env::set_var("RUST_LOG", "actix_web=info");
+    ::std::env::set_var("RUST_LOG", "actix-cn=info");
     ::std::env::set_var("RUST_BACKTRACE", "1");
     env_logger::init();
     let sys = actix::System::new("webapp");
@@ -72,7 +72,6 @@ fn main() {
                 r.method(Method::POST).with(theme_add_comment); 
             })
             .register())
-            .handler("/res", fs::StaticFiles::new("resource"))
             .handler("/", fs::StaticFiles::new("public")))
         .bind("127.0.0.1:8000").unwrap()
         .shutdown_timeout(3)
