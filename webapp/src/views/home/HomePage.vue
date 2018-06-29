@@ -92,9 +92,9 @@ export default {
                     if (rusult[index].category_name == 'share')  rusult[index].category_name = '分享'
                     if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
                   }
-                  this.theme_page_list = rusult
+                  this.theme_list = rusult
                   this.page_count = json.theme_page_count
-                  console.log(json)
+                  console.log(this.theme_list)
               })
               .catch((e) => {
                 console.log(e)

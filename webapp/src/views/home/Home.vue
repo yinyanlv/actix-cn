@@ -120,6 +120,7 @@ export default {
                     if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
                   }
                   this.theme_page_list = rusult
+                  console.log(this.theme_page_list)
               })
               .catch((e) => {
                 console.log(e)
