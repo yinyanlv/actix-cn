@@ -2,7 +2,7 @@
   <div id="mnav">
       <header>
         <div id="line"></div>
-        <h1><router-link to="/">Rust</router-link></h1>
+        <h1><router-link to="/">Actix</router-link></h1>
         <label ><router-link to="#" id="menu">Menu</router-link></label>
       </header>
       <div id="lnav">

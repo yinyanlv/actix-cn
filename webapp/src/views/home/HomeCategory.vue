@@ -32,22 +32,16 @@
               <div >
                     <ul id="pagination">
                             <li id="one" ><a :href="'/a/home/' + $route.params.homecategory">1</a></li>
+                            <li v-if="page_count > 2"> <a :href="'/a/home/' + $route.params.homecategory + '/2'">2</a></li>
 
-                            <li v-if="$route.params.number < 2"></li>
-                            <li v-if="$route.params.number > 1"><a :href="'/a/home/' + $route.params.homecategory + '/' + ($route.params.number - 1)"> << </a></li>
-                            
                             <li >••</li>
 
-                            <li v-if="page_count/2 > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 - 1)">{{ page_count/2 - 1 }}</a></li>
-                            <li v-if="page_count/2 >= 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + page_count/2" >{{ page_count/2 }}</a></li>
-                            <li v-if="page_count/2 > 1" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 + 1)" >{{ page_count/2 + 1 }}</a></li>
+                            <li v-if="(page_count/2 - 3) > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 - 3)">{{ page_count/2 - 3 }}</a></li>
+                            <li v-if="page_count/2 > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + page_count/2" >{{ page_count/2 }}</a></li>
+                            <li v-if="(page_count/2 + 3) < page_count" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 + 3)" >{{ page_count/2 + 3 }}</a></li>
 
                             <li >••</li>
                             
-                            <li v-if="$route.params.number == page_count"></li>
-                            <li v-else-if="($route.params.number >= 1)&&($route.params.number != page_count)"><a :href="'/a/home/' + $route.params.homecategory + '/' + ($route.params.number - (-1))"> >> </a></li>
-                            <li v-else></li>
-
                             <li ><a :href="'/a/home/' + $route.params.homecategory + '/' + page_count">{{ page_count }}</a></li>  
                     </ul>       
               </div>
