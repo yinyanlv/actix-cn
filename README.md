@@ -36,7 +36,7 @@ $ cd webapp
 $ npm install
 $ npm run build
 $ cd ..
-$ cargo run
+$ cargo run --release
 ```
 then open broswer 'http://localhost:8000/'
 

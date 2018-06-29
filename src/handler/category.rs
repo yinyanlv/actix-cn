@@ -6,12 +6,11 @@ use actix::*;
 use actix_web::*;
 use chrono::Utc;
 use std::collections::HashSet;
-use utils::state::get_category_id;
 use model::response::{CategorysMsgs, Msgs, CategoryThemePageListMsgs};
 use model::db::ConnDsl;
 use model::theme::Theme;
 use model::user::User;
-use utils::{time, state::PAGE_SIZE};
+use utils::{time, state::{PAGE_SIZE, get_category_id, get_category_name_en}};
 use model::category::{Category, Categorys, NewCategory, CategoryNew, CategoryThemePageList, CategoryThemeListResult};
 
 
@@ -20,7 +19,6 @@ impl Handler<CategoryNew> for ConnDsl {
 
     fn handle(&mut self, category_new: CategoryNew, _: &mut Self::Context) -> Self::Result {
         use utils::schema::categorys::dsl::*;
-
         let new_category = NewCategory {
             user_id: category_new.user_id,
             category_name: &category_new.category_name,
@@ -68,7 +66,6 @@ impl Handler<CategoryThemePageList> for ConnDsl {
             .bind::<Integer, _>(PAGE_SIZE)
             .bind::<Integer, _>((category_theme_page_list.page_id - 1) * PAGE_SIZE)
             .load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-
         let mut category_themes_list: Vec<CategoryThemeListResult> = vec![];
         for theme_one in themes_page_result {
             let mut category_themes_list_one = CategoryThemeListResult::new();

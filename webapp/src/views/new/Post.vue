@@ -8,14 +8,11 @@
                             <div id="topic-group">
                                 <span  id="category">
                                         <select v-if="username == 'admin'" name="category_name" v-model="CategoryName" id="category-control" >
-                                            <option value="muro">muro<span class="icon-arrow"></span></option>
-                                            <option value="office">Office</option>
-                                            <option v-bind:value="category_name" v-for="(category_name, index) in category_names" :key="index">
+                                            <option v-bind:value="category_name" v-for="(category_name, index) in category_names_admin" :key="index">
                                                     {{category_name}}
                                             </option>
                                         </select>
                                         <select v-else name="category_name" v-model="CategoryName" id="category-control">
-                                            <option value="muro">muro<span class="icon-arrow"></span></option>
                                             <option v-bind:value="category_name" v-for="(category_name, index) in category_names" :key="index">
                                                     {{category_name}}
                                             </option>
@@ -52,6 +49,7 @@ export default {
         return {
             username: '',
             category_names: '',
+            category_names_admin: '',
             CategoryName: '',
             Title: '',
             Content: ''
@@ -60,19 +58,24 @@ export default {
     mounted: function() {
         var username = JSON.parse(sessionStorage.getItem('signin_user')).username
         this.username = username
-        var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-        let data = { 
-            create_user_id: user_id
-        }
-              fetch(URLprefix + 'api/category_names', {
-                  body: JSON.stringify(data), 
-                  headers: {
-                    'content-type': 'application/json'
-                  },
-                  method: 'POST',
+              fetch(URLprefix + 'api/categorys', {
+                  method: 'GET',
               }).then(response => response.json())
               .then(json => {
-                    this.category_names = json.category_names
+                    this.categorys = json.categorys
+                    let category_names_admin = []
+                    let category_names = []
+                    this.categorys.map((item) => category_names_admin.push(item.category_name))
+                    for (let index = 0; index < category_names_admin.length; index++) {
+                        if (category_names_admin[index] == 'office') category_names_admin[index] = '官方'
+                        if (category_names_admin[index] == 'blog') category_names_admin[index] = '博客'
+                        if (category_names_admin[index] == 'faq') category_names_admin[index] = '问答'
+                        if (category_names_admin[index] == 'share')  category_names_admin[index] = '分享'
+                        if (category_names_admin[index] == 'job') category_names_admin[index] = '招聘'
+                    }
+                    this.category_names_admin = category_names_admin
+                    category_names_admin.filter((item) => { if (item != '官方') category_names.push(item)})
+                    this.category_names = category_names
               })
               .catch((e) => {
                 console.log(e)
@@ -99,7 +102,7 @@ export default {
               }).then(response => response.json())
               .then(json => {
                     window.location.reload ( true )
-                    this.$router.push('/a/category/' + category_name)
+                    this.$router.push('/')
               })
               .catch((e) => {
                 console.log(e)
@@ -117,7 +120,7 @@ main {
     width: 100%;
     line-height: 33px;
     border :1px solid #CAC1C1;
-    background-color:#d1f0e3;
+    background-color:#f5fdfa;
 }
 form #topic-group {
    margin: 11px 0 11px 0;
@@ -138,7 +141,7 @@ form #new textarea {
 form #new button {
     width:63px; 
     line-height:25px;
-    background-color:rgb(255, 255, 255);
+    background-color:#FFFFFF;
     border :1px solid #a39c9c;
 }
 @media only screen and (max-width: 600px) {
@@ -178,6 +181,7 @@ form #new button {
     #container #content {
         width: 80%;
         margin-right: 1rem;
+        background-color: #FFFFFF;
     }
     #container #side {
         flex: 1;

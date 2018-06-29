@@ -12,3 +12,13 @@ pub fn get_category_id(category_name: &str) -> i32 {
     let category_id  = category_dir.get(category_name).unwrap();
     *category_id
 }
+
+pub fn get_category_name_en(category_name: &str) -> &str {
+    let mut category_dir = HashMap::new();
+    category_dir.insert("官方", "office");
+    category_dir.insert("博客", "blog");
+    category_dir.insert("问答","faq");
+    category_dir.insert("分享", "share");
+    category_dir.insert("招聘", "job");
+    category_dir.get(category_name).unwrap()
+}

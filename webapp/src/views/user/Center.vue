@@ -4,21 +4,29 @@
       <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
       <div id="title">
           <ul>
-              <li>主题</li>
-              <li id="item">评论</li>
-              <li id="item">收藏</li>
-              <li id="item">消息</li>
+              <li><a :href="'/a/user/' + $route.params.id" >主题</a></li>
+              <li><a :href="'/a/user/' + $route.params.id + '/comment'" >评论</a></li>
+              <li><a :href="'/a/user/' + $route.params.id + '/save'" >收藏</a></li>
+              <li><a :href="'/a/user/' + $route.params.id + '/message'" >消息</a></li>
           </ul>
       </div>
       <main>
         <div id="container">
             <div id="body">
-                <div>
-                    <p>主题</p>
-                    <p>评论</p>
-                    <p>收藏</p>
-                    <p>消息</p>
-                </div>
+                <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                            <div id="item">
+                                <span id="item-title">
+                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                </span>
+                                <span id="right">
+                                    <span id="info"><a :href="'/a/user/' + theme.user_id">{{ username }}</a></span>
+                                    <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
+                                    <span id="info">{{ theme.view_count }}</span>
+                                    <span id="info"> {{ theme.created_at }} </span>
+                                    <span >  •••  </span>
+                                </span> 
+                            </div>
+                      </div>
             </div>
             <div id="aside">
                 <div id="right">
@@ -64,7 +72,8 @@ export default {
       Newmail: '',
       Newpassword: '',
       ConfirmNewpassword: '',
-      userupdate: false
+      userupdate: false,
+      theme_list: ''
     }
   },
   mounted: function() {
@@ -83,6 +92,22 @@ export default {
             console.log(e)
         }) 
       }
+      let data = { user_id : Number.parseInt(this.$route.params.id)}
+      fetch(URLprefix + 'api/user/id/themes',{
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+                  mode: 'cors'
+              }).then(response => response.json())
+              .then(json => {
+                  this.theme_list = json.themes
+                  console.log(this.theme_list)
+              })
+              .catch((e) => {
+                console.log(e)
+              })
   },
   methods: {
     login() {
@@ -147,6 +172,28 @@ export default {
 #title {
     line-height: 3.3rem;
     background-color: #faeaf5;
+}
+#center #content #items #right {
+  float: right;
+}
+#center #items #item {
+  padding: 2vh 0.6vw;
+  border-bottom: 1px solid #f3e1f8;
+}
+#center #items #item-title a {
+  font-size: 1.1rem;
+  color: #0541af;
+}
+#center #office-title {
+  color: #b93bf3;
+}
+#center #items #right .col-name {
+    color: #7a097a;
+    font-size: 0.8rem;
+}
+#center #items #right a {
+  color: #0541af;
+  font-size: 0.9rem;
 }
 button {
     width: 7rem; 
@@ -222,13 +269,11 @@ button {
       height: 8rem;
   }
   #title ul {
-      margin-left: 14vw;
+      margin-left: 12vw;
   }
-  #title ul li {
+  #title ul li{
       display: inline-block;
       font-weight: bold;
-  }
-  #title ul #item {
       padding-left: 2rem;
   }
    main {

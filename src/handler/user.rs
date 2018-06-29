@@ -6,9 +6,10 @@ use chrono::Utc;
 use bcrypt::{DEFAULT_COST, hash, verify};
 use utils::token;
 
-use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete};
-use model::response::{Msgs, SigninMsgs, UserInfoMsgs};
+use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete, UserThemes};
+use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs};
 use model::db::ConnDsl;
+use model::theme::Theme;
 use model::response::MyError;
 
 impl Handler<SignupUser> for ConnDsl {
@@ -162,6 +163,21 @@ impl Handler<UserUpdate> for ConnDsl {
         Ok(Msgs{
                 status: 200,
                 message : "update  loginuser success.".to_string(),
+        })
+    }
+}
+
+impl Handler<UserThemes> for ConnDsl {
+    type Result = Result<UserThemesMsgs, Error>;
+
+    fn handle(&mut self, user_themes: UserThemes, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::themes::dsl::*;
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let user_themes_result = themes.filter(&user_id.eq(&user_themes.user_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        Ok(UserThemesMsgs{
+                status: 200,
+                message : "update  loginuser success.".to_string(),
+                themes : user_themes_result,
         })
     }
 }

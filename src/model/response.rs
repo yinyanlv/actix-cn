@@ -66,7 +66,12 @@ pub struct CategoryThemePageListMsgs {
     pub category_theme_list : Vec<CategoryThemeListResult>,
     pub theme_category_page_count: i32,
 }
-
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserThemesMsgs {
+    pub status: i32,
+    pub message : String,
+    pub themes : Vec<Theme>,
+}
 impl ThemeAndCommentsMsgs {
     pub fn new() -> ThemeAndCommentsMsgs {
             ThemeAndCommentsMsgs{

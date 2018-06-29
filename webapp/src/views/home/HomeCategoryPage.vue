@@ -19,7 +19,7 @@
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a :href="'/a/category/' + theme.category_name">{{ theme.category_name }}</a></span>
+                                    <span id="info" class="col-name">{{ category_name }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -70,15 +70,20 @@ export default {
     return {
       theme_list: '',
       signin_user: '',
-      page_count: ''
+      page_count: '',
+      category_name: ''
     }
   },
   mounted: function() {
+    let name = this.$route.params.homecategory
+       if (name == 'blog') this.category_name = '博客'
+       if (name == 'faq') this.category_name = '问答'
+       if (name == 'share') this.category_name = '分享'
+       if (name == 'job') this.category_name = '招聘'
     let home_page_id = this.$route.params.number
-    let page_id = Number.parseInt(home_page_id)
     let category_name = this.$route.params.homecategory
     let data = { 
-        page_id: page_id,
+        page_id: Number.parseInt(home_page_id),
         category_name: category_name
     }
     console.log(category_name)
@@ -142,6 +147,10 @@ main {
 #center #items #right a {
   color: #0541af;
   font-size: 0.9rem;
+}
+#center #items #right .col-name {
+    color: #7a097a;
+    font-size: 0.8rem;
 }
 #center #content #right #info {
   padding-right: 1vw;

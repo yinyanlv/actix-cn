@@ -19,7 +19,7 @@
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a :href="'/a/category/' + theme.category_name">{{ theme.category_name }}</a></span>
+                                    <span id="info" class="col-name">{{ theme.category_name }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -34,7 +34,7 @@
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a :href="'/a/category/' + theme.category_name">{{ theme.category_name }}</a></span>
+                                    <span id="info" class="col-name">{{ theme.category_name }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -89,8 +89,13 @@ export default {
                   method: 'GET',
               }).then(response => response.json())
               .then(json => {
-                  this.theme_list = json.theme_list
-                  console.log(json)
+                  let rusult = json.theme_list
+                  for (let index = 0; index < rusult.length; index++) {
+                    if (rusult[index].category_name == 'office') {
+                        rusult[index].category_name = '官方'
+                    }
+                  }
+                  this.theme_list = rusult
               })
               .catch((e) => {
                 console.log(e)
@@ -106,9 +111,15 @@ export default {
                   mode: 'cors'
               }).then(response => response.json())
               .then(json => {
-                  this.theme_page_list = json.theme_list
                   this.page_count = json.theme_page_count
-                  console.log(json)
+                  let rusult = json.theme_list
+                  for (let index = 0; index < rusult.length; index++) {
+                    if (rusult[index].category_name == 'blog') rusult[index].category_name = '博客'
+                    if (rusult[index].category_name == 'faq') rusult[index].category_name = '问答'
+                    if (rusult[index].category_name == 'share')  rusult[index].category_name = '分享'
+                    if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
+                  }
+                  this.theme_page_list = rusult
               })
               .catch((e) => {
                 console.log(e)
@@ -153,6 +164,10 @@ main {
 }
 #center #office-title {
   color: #b93bf3;
+}
+#center #items #right .col-name {
+    color: #7a097a;
+    font-size: 0.8rem;
 }
 #center #items #right a {
   color: #0541af;
