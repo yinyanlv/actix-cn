@@ -1,5 +1,5 @@
 use model::user::User;
-use model::theme::{ThemeListResult, Theme, CommentReturn};
+use model::theme::{ThemeListResult, Theme, CommentReturn, Comment};
 use model::category::{Category, CategoryThemeListResult};
 
 pub enum MyError {
@@ -71,6 +71,12 @@ pub struct UserThemesMsgs {
     pub status: i32,
     pub message : String,
     pub themes : Vec<Theme>,
+}
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserCommentsMsgs {
+    pub status: i32,
+    pub message : String,
+    pub comments : Vec<Comment>,
 }
 impl ThemeAndCommentsMsgs {
     pub fn new() -> ThemeAndCommentsMsgs {

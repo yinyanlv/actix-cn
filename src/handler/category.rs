@@ -10,7 +10,7 @@ use model::response::{CategorysMsgs, Msgs, CategoryThemePageListMsgs};
 use model::db::ConnDsl;
 use model::theme::Theme;
 use model::user::User;
-use utils::{time, state::{PAGE_SIZE, get_category_id, get_category_name_en}};
+use utils::{time, state::PAGE_SIZE};
 use model::category::{Category, Categorys, NewCategory, CategoryNew, CategoryThemePageList, CategoryThemeListResult};
 
 
@@ -22,6 +22,7 @@ impl Handler<CategoryNew> for ConnDsl {
         let new_category = NewCategory {
             user_id: category_new.user_id,
             category_name: &category_new.category_name,
+            category_name_cn: &category_new.category_name_cn,
             created_at: Utc::now().naive_utc(),
         };
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
@@ -57,12 +58,16 @@ impl Handler<CategoryThemePageList> for ConnDsl {
         use utils::schema::users;
         use utils::schema::categorys;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let theme_category_id = get_category_id(&(category_theme_page_list.category_name));
-        let mut themes_result = themes.order(id).filter(&category_id.eq(&theme_category_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        let theme_category_one = categorys::table.filter(&categorys::category_name.eq(&category_theme_page_list.category_name)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
+        let the_category_id = match theme_category_one {
+            Some(theme_category_id) => theme_category_id.id,
+            None => 0,
+        };
+        let mut themes_result = themes.filter(category_id.eq(the_category_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
         let theme_category_count = themes_result.len() as i32;
         let theme_category_page_count = (theme_category_count + PAGE_SIZE - 1) / PAGE_SIZE ;
-        let mut themes_page_result = sql_query("SELECT * FROM themes WHERE themes.category_id = $1 ORDER BY themes.id ASC limit $2 OFFSET $3")
-            .bind::<Integer, _>(theme_category_id)
+        let mut themes_page_result = sql_query("SELECT * FROM themes WHERE themes.category_id = $1 ORDER BY themes.id DESC limit $2 OFFSET $3")
+            .bind::<Integer, _>(the_category_id)
             .bind::<Integer, _>(PAGE_SIZE)
             .bind::<Integer, _>((category_theme_page_list.page_id - 1) * PAGE_SIZE)
             .load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;

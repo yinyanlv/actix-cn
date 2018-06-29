@@ -6,7 +6,8 @@
                 <div id="center">
                     <div id="content">
                         <div id="top"><p>Crate Category</p></div><br>
-                        <input type="text" name="category_name" v-model="CategoryNmae" placeholder="category_name"><br><br>
+                        <input type="text" name="category_name_cn" v-model="CategoryNmaeCN" placeholder="中文表示"><br><br>
+                        <input type="text" name="category_name" v-model="CategoryNmae" placeholder="英文表示"><br><br>
                         <button type="submit" id="submit" @click="create" ><span class="tip"> Create </span></button>
                     </div>
                 </div>
@@ -27,17 +28,19 @@ export default {
     },
     data () {
         return {
-            CategoryNmae: ''
+            CategoryNmae: '',
+            CategoryNmaeCN: ''
         }
     },
     methods: {
         create () {
-            var category_name = this.CategoryNmae
-            console.log(category_name)
-            var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+            let category_name = this.CategoryNmae
+            let category_name_cn = this.CategoryNmaeCN
+            let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
             let data = { 
                 user_id: Number.parseInt(user_id),
-                category_name: category_name
+                category_name: category_name,
+                category_name_cn: category_name_cn
             }
               fetch(URLprefix + 'api/category_new', {
                   body: JSON.stringify(data), 

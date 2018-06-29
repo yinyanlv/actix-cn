@@ -31,7 +31,8 @@
                       <div id="items" v-for="theme in theme_page_list">
                             <div id="item" v-if="theme.category_name !== '官方'">
                                 <span id="item-title">
-                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-if="theme.category_name == '博客'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-else :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
                                     <span id="info" class="col-name">{{ theme.category_name }}</span>
@@ -120,7 +121,6 @@ export default {
                     if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
                   }
                   this.theme_page_list = rusult
-                  console.log(this.theme_page_list)
               })
               .catch((e) => {
                 console.log(e)
@@ -165,9 +165,10 @@ main {
 }
 #center #office-title {
   color: #b93bf3;
+  font-weight: bold;
 }
 #center #items #right .col-name {
-    color: #7a097a;
+    color: #f16bf1;
     font-size: 0.8rem;
 }
 #center #items #right a {

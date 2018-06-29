@@ -8,6 +8,7 @@ pub fn category_new((category_new, state): (Json<CategoryNew>, State<AppState>))
     state.db.send(CategoryNew{ 
             user_id: category_new.user_id,
             category_name: category_new.category_name.clone(),
+            category_name_cn: category_new.category_name_cn.clone(),
         })
         .from_err()
         .and_then(|res| {

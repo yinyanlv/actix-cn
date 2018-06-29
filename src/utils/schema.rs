@@ -26,6 +26,7 @@ table! {
         id -> Int4,
         user_id -> Int4,
         category_name -> Text,
+        category_name_cn -> Text,
         created_at -> Timestamp,
     }
 }

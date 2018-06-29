@@ -16,7 +16,8 @@
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-if="theme.category_name == '博客'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-else :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
                                     <span id="info" class="col-name">{{ theme.category_name }}</span>
@@ -145,7 +146,7 @@ main {
   font-size: 0.9rem;
 }
 #center #items #right .col-name {
-    color: #7a097a;
+    color: #f16bf1;
     font-size: 0.8rem;
 }
 #center #content #right #info {

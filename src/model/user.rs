@@ -2,7 +2,7 @@ use actix::*;
 use actix_web::*;
 use utils::schema::users;
 use chrono::{Utc, NaiveDateTime};
-use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs};
+use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs,UserCommentsMsgs};
 use model::response::MyError;
 
 #[derive(Debug,Serialize,Deserialize,PartialEq,Identifiable,Queryable)]
@@ -58,6 +58,10 @@ pub struct UserDelete {
 pub struct UserThemes {
     pub user_id: i32,
 }
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserComments {
+    pub user_id: i32,
+}
 
 impl Message for SignupUser {
     type Result = Result<Msgs, Error>;
@@ -79,6 +83,9 @@ impl Message for UserDelete {
 }
 impl Message for UserThemes {
     type Result = Result<UserThemesMsgs, Error>;
+}
+impl Message for UserComments {
+    type Result = Result<UserCommentsMsgs, Error>;
 }
 impl User {
     pub fn new() -> User {

@@ -2,14 +2,18 @@
     <div id="theme">
         <main>
             <div id="container">
-                <div id="body">
-                    <div id="theme">
-                        <div id="title">
-                            <h2> {{ theme.title }} </h2> 
-                            <span id="info"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
+                <div id="mei">
+                    <div id="title">
+                            <h1> {{ theme.title }} </h1> 
+                            <span id="right">
+                            <span id="info" class="first"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
                             <span id="info"><a :href="'/a/user/' + theme_user.user_id">{{ theme_user.username }}</a></span> •   
                             <span id="info">{{ theme_rtime }}</span>  
-                        </div>
+                            </span>
+                    </div>
+                </div>
+                <div id="body">
+                    <div id="theme">
                         <div id="content" v-html="theme.content" ></div>
                     </div>
                     <hr>
@@ -37,7 +41,6 @@
                         <a href="/a/access" style="background-color:aqua;">Login</a>
                     </div>    
                 </div>
-                <side></side>
             </div>
         </main>
     </div>
@@ -46,12 +49,8 @@
 <script>
 /* eslint-disable */
 import URLprefix from '../../config'
-import Side from '../../components/side/Side'
 export default {
     name: 'theme',
-    components: {
-        "side": Side
-    },
     data: function() {
         return {
             Comment: '',
@@ -124,18 +123,6 @@ main {
 }
 a {
     color: #0541af;
-}
-#body #theme > #title {
-    margin-top: 2px;
-    padding: 10px;
-    border-bottom: 1px solid rgb(223, 223, 223);
-}
-#body #theme > #title h2 { 
-    padding-bottom: 0.3rem;
-}
-#body #theme > #title #info {
-    display: inline-block;
-    font-size: 14px;
 }
 #body #theme > #content {
     margin: 10px;
@@ -228,19 +215,24 @@ pre code {
 @media only screen and (min-width: 1000px) {
     main {
         margin: 0 auto;
-        width: 72%;
+        width: 66%;
         padding-top: 77px;
     }
-    #container {
-      display: flex;
-      flex-flow: row;
+    #mei {
+        margin: -1vh 0 1vh;
+        height: 13rem;
+        background-color: #aaf0db;
     }
-    #container #body {
-        width: 80%;
-        margin-right: 1rem;
+   
+    #mei #title #right {
+        float: right;
+        font-size: 14px;
+        margin-right: 2rem;
     }
-    #container #side {
-        flex: 1;
+    #mei h1 {
+        line-height: 11rem;
+        margin: 0 auto;
+        padding: 0 4rem;
     }
 }
 </style>

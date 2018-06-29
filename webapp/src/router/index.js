@@ -10,11 +10,15 @@ import Actix from '../views/wiki/dir/Actix'
 import Yew from '../views/wiki/dir/Yew'
 import Explore from '../views/explore/Explore'
 import Theme from '../views/theme/Theme'
+import Blog from '../views/theme/Blog'
 import Post from '../views/new/Post'
 import Create from '../views/new/Create'
 import Access from '../views/user/Access'
 import SignUp from '../views/user/SignUp'
 import Center from '../views/user/Center'
+import Comment from '../views/user/Comment'
+import Save from '../views/user/Save'
+import Message from '../views/user/Message'
 import More from '../views/more/More'
 import NotFound from '../views/notfound/NotFound'
 Vue.use(Router)
@@ -31,12 +35,16 @@ export default new Router({
         { path: '/a/wiki/actix', name: 'actix', component: Actix },
         { path: '/a/wiki/yew', name: 'yew', component: Yew },
     { path: '/a/explore', name: 'explore', component: Explore },
+    { path: '/a/blog/theme/:id', name: 'theme', component: Blog },
     { path: '/a/:category/theme/:id', name: 'theme', component: Theme },
     { path: '/a/post', name: 'post', component: Post },
     { path: '/a/create', name: 'create', component: Create },
     { path: '/a/access', name: 'access', component: Access },
     { path: '/a/signup', name: 'signup', component: SignUp },
     { path: '/a/user/:id', name: 'user', component: Center },
+        { path: '/a/user/:id/comment', name: 'comment', component: Comment },
+        { path: '/a/user/:id/save', name: 'save', component: Save },
+        { path: '/a/user/:id/message', name: 'message', component: Message },
     { path: '/a/more', name: 'more', component: More },
     { path: '*', name: 'notfound', component: NotFound }
   ]

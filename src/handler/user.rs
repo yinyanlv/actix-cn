@@ -6,10 +6,10 @@ use chrono::Utc;
 use bcrypt::{DEFAULT_COST, hash, verify};
 use utils::token;
 
-use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete, UserThemes};
-use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs};
+use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete, UserThemes,UserComments};
+use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs,UserCommentsMsgs};
 use model::db::ConnDsl;
-use model::theme::Theme;
+use model::theme::{Theme, Comment};
 use model::response::MyError;
 
 impl Handler<SignupUser> for ConnDsl {
@@ -178,6 +178,21 @@ impl Handler<UserThemes> for ConnDsl {
                 status: 200,
                 message : "update  loginuser success.".to_string(),
                 themes : user_themes_result,
+        })
+    }
+}
+
+impl Handler<UserComments> for ConnDsl {
+    type Result = Result<UserCommentsMsgs, Error>;
+
+    fn handle(&mut self, user_comments: UserComments, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::comments::dsl::*;
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let user_comments_result = comments.filter(&user_id.eq(&user_comments.user_id)).load::<Comment>(conn).map_err(error::ErrorInternalServerError)?;
+        Ok(UserCommentsMsgs{
+                status: 200,
+                message : "update  loginuser success.".to_string(),
+                comments : user_comments_result,
         })
     }
 }

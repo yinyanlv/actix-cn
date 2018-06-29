@@ -44,6 +44,8 @@ then open broswer 'http://localhost:8000/'
 
 <img alt="Home" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/home.png">
 
+<img alt="user" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/blog.png">
+
 <img alt="user" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/user.png">
 
 ## Contribute

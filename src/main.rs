@@ -34,7 +34,7 @@ use api::index::{AppState, home, path};
 use api::auth::{signup, signin};
 use api::theme::{theme_page_list, theme_and_comments,theme_list, theme_new, theme_add_comment};
 use api::category::{categorys, category_new, category_theme_page_list};
-use api::user::{user_info, user_delete, user_update,user_themes};
+use api::user::{user_info, user_delete, user_update,user_themes,user_comments};
 
 fn main() {
     ::std::env::set_var("RUST_LOG", "actix-cn=info");
@@ -61,6 +61,7 @@ fn main() {
             .resource("/api/user_delete", |r| { r.method(Method::GET).h(user_delete); })
             .resource("/api/user_update", |r| { r.method(Method::POST).with(user_update); })
             .resource("/api/user/id/themes", |r| { r.method(Method::POST).with(user_themes); })
+            .resource("/api/user/id/comments", |r| { r.method(Method::POST).with(user_comments); })
             .resource("/api/theme_list", |r| { r.method(Method::GET).h(theme_list); })
             .resource("/api/theme_list/page_id", |r| { r.method(Method::POST).with(theme_page_list); })
             .resource("/api/theme_new", |r| { r.method(Method::POST).with(theme_new); })

@@ -177,7 +177,7 @@ impl Handler<ThemeNew> for ConnDsl {
         use utils::schema::themes::dsl::*;
         use utils::schema::categorys;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let category_one =  categorys::table.filter(categorys::category_name.eq(theme_new.category_name)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
+        let category_one =  categorys::table.filter(categorys::category_name_cn.eq(theme_new.category_name)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
         let cid: i32 ;
         match category_one {
             Some(one) => { cid = one.id;},

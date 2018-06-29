@@ -2,7 +2,7 @@ use actix_web::{HttpMessage, HttpRequest, HttpResponse, State, Json, AsyncRespon
 use futures::future::Future;
 use utils::token::verify_token;
 
-use model::user::{UserInfo, UserDelete, UserUpdate, UserThemes};
+use model::user::{UserInfo, UserDelete, UserUpdate, UserThemes,UserComments};
 use api::index::AppState;
 
 
@@ -86,6 +86,19 @@ pub fn user_update((user_update, state): (Json<UserUpdate>, State<AppState>)) ->
 pub fn user_themes((user_themes, state): (Json<UserThemes>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(UserThemes{ 
             user_id: user_themes.user_id,
+        })
+        .from_err()
+        .and_then(|res| {
+            match res {
+                Ok(msg) => Ok(HttpResponse::Ok().json(msg)),
+                Err(_) => Ok(HttpResponse::InternalServerError().into())
+            }
+        }).responder()
+}
+
+pub fn user_comments((user_comments, state): (Json<UserComments>, State<AppState>)) -> FutureResponse<HttpResponse> {
+    state.db.send(UserComments{ 
+            user_id: user_comments.user_id,
         })
         .from_err()
         .and_then(|res| {
