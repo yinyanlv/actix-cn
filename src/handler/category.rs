@@ -58,6 +58,7 @@ impl Handler<CategoryThemePageList> for ConnDsl {
         use utils::schema::users;
         use utils::schema::categorys;
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        
         if category_theme_page_list.category_name == "care" {
             let mut themes_result = themes.filter(comment_count.eq(0)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
             let theme_category_count = themes_result.len() as i32;

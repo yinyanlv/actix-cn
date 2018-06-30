@@ -79,6 +79,12 @@ pub struct UserCommentsMsgs {
     pub comments : Vec<Comment>,
 }
 #[derive(Deserialize,Serialize, Debug)]
+pub struct UserSavesMsgs {
+    pub status: i32,
+    pub message : String,
+    pub saves : Vec<Theme>,
+}
+#[derive(Deserialize,Serialize, Debug)]
 pub struct BlogLikeMsgs {
     pub status: i32,
     pub message : String,

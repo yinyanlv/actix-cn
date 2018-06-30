@@ -6,10 +6,10 @@ use chrono::Utc;
 use bcrypt::{DEFAULT_COST, hash, verify};
 use utils::token;
 
-use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete, UserThemes,UserComments};
-use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs,UserCommentsMsgs};
+use model::user::{User, NewUser, SignupUser, SigninUser, UserInfo, UserUpdate, UserDelete, UserThemes,UserComments,UserSaves};
+use model::response::{Msgs, SigninMsgs, UserInfoMsgs, UserThemesMsgs,UserCommentsMsgs, UserSavesMsgs};
 use model::db::ConnDsl;
-use model::theme::{Theme, Comment};
+use model::theme::{Theme, Comment,Save};
 use model::response::MyError;
 
 impl Handler<SignupUser> for ConnDsl {
@@ -193,6 +193,30 @@ impl Handler<UserComments> for ConnDsl {
                 status: 200,
                 message : "update  loginuser success.".to_string(),
                 comments : user_comments_result,
+        })
+    }
+}
+
+impl Handler<UserSaves> for ConnDsl {
+    type Result = Result<UserSavesMsgs, Error>;
+
+    fn handle(&mut self, user_saves: UserSaves, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::saves::dsl::*;
+        use utils::schema::themes;
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let user_saves = saves.filter(user_id.eq(user_saves.user_id)).load::<Save>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut themes: Vec<Theme> = vec![];
+        for save in user_saves {
+            let theme_one = themes::table.filter((themes::id).eq(save.theme_id)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?.pop();
+            match theme_one {
+                Some(one) => themes.push(one),
+                Nome => { println!("No save result"); },
+            }
+        }
+        Ok(UserSavesMsgs{
+                status: 200,
+                message : "update  loginuser success.".to_string(),
+                saves : themes,
         })
     }
 }
