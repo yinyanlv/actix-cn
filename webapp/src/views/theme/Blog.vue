@@ -1,18 +1,20 @@
 <template>
-    <div id="theme">
+    <div id="blog">
         <main>
             <div id="container">
                 <div id="mei">
                     <div id="title">
                             <h1> {{ theme.title }} </h1> 
-                            <span id="right">
+                            <span id="save" @click="save">收藏</span>
+                            <span id="like">喜欢 <span id="likeid">{{like}} </span> </span>
+                            <span id="right"> 
                             <span id="info" class="first"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
                             <span id="info"><a :href="'/a/user/' + theme_user.user_id">{{ theme_user.username }}</a></span> •   
                             <span id="info">{{ theme_rtime }}</span>  
                             </span>
                     </div>
                 </div>
-                <div id="body">
+                <div id="center">
                     <div id="theme">
                         <div id="content" v-html="theme.content" ></div>
                     </div>
@@ -50,7 +52,7 @@
 /* eslint-disable */
 import URLprefix from '../../config'
 export default {
-    name: 'theme',
+    name: 'blog',
     data: function() {
         return {
             Comment: '',
@@ -59,7 +61,8 @@ export default {
             theme_category_name: '',
             theme_rtime: '',
             theme_comments: '',
-            signin_user: ''
+            signin_user: '',
+            like: ''
         }
     },
     mounted: function() {
@@ -80,22 +83,39 @@ export default {
             if (json.theme_category_name == 'job') json.theme_category_name = '招聘'
             this.theme_category_name = json.theme_category_name
             this.theme_comments = json.theme_comments
-            console.log(this.theme.content)
         }).catch((e) => {
             console.log(e)
         })
+        let theme_id = this.$route.params.id
+        let data = { 
+            theme_id: Number.parseInt(theme_id)
+        }
+        fetch(URLprefix + 'api/blog/like', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+                  mode: 'cors'
+              }).then(response => response.json())
+              .then(json => {
+                  this.like = json.number
+              })
+              .catch((e) => {
+                console.log(e)
+              })
   },
   methods: {
     comment () {
-      let comment = this.Comment
-      let theme_id = this.$route.params.id
-      let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-      let data = {
-          the_theme_id: theme_id,
-          user_id: user_id,
-          comment: comment
-      }
-              fetch(URLprefix + 'api/' + this.$route.params.id, {
+        let comment = this.Comment
+        let theme_id = this.$route.params.id
+        let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+        let data = {
+            the_theme_id: theme_id,
+            user_id: user_id,
+            comment: comment
+        }
+        fetch(URLprefix + 'api/' + this.$route.params.id, {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
@@ -105,6 +125,33 @@ export default {
               .then(json => {
                   console.log(json)
                   window.location.reload ( true )
+              })
+              .catch((e) => {
+                console.log(e)
+              })        
+    },
+    save(){
+            let save = document.getElementById("save")
+            let likeid = document.getElementById("likeid")
+            save.style.color = "green"
+            save.innerHTML = "已收藏"
+            likeid.innerHTML = Number.parseInt(likeid.innerHTML) + 1
+            let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+            let theme_id = this.$route.params.id
+            let data = { 
+                user_id: Number.parseInt(user_id),
+                theme_id: Number.parseInt(theme_id)
+            }
+            fetch(URLprefix + 'api/blog/save', {
+                  body: JSON.stringify(data), 
+                  headers: {
+                    'content-type': 'application/json'
+                  },
+                  method: 'POST',
+                  mode: 'cors'
+              }).then(response => response.json())
+              .then(json => {
+                  console.log(json)
               })
               .catch((e) => {
                 console.log(e)
@@ -118,13 +165,13 @@ export default {
 main {
     padding-bottom: 44px;
 }
-#body {
+#center {
     background-color: #ffffff;
 }
 a {
     color: #0541af;
 }
-#body #theme > #content {
+#center #theme > #content {
     margin: 10px;
 }
 hr {
@@ -132,73 +179,43 @@ hr {
     background-color: #faf5f5;
     border: 0;
 }
-#body #comment > #count {
+#center #comment > #count {
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail {
+#center #comment #detail {
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail #infos{
+#center #comment #detail #infos{
     margin: 10px;
     margin-bottom: 10px;
 }
-#body #comment #detail #info{
+#center #comment #detail #info{
     display: inline-block;
     font-size: 14px;
 }
-#body #comment #detail #content {
+#center #comment #detail #content {
     margin: 10px;
 }
-#body #reply {
+#center #reply {
     margin: 10px;
 }
-#body #reply #write {
+#center #reply #write {
     margin-bottom: 10px;
 }
 #reply textarea {
     width:100%; 
     height: 200px;
 }
-#body #reply button {
+#center #reply button {
     width:66px; 
     line-height:25px;
     background-color:#ffffff;
     border :1px solid #a39c9c;
 }
-pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    word-break: break-all;
-    word-wrap: break-word;
-    background-color: #f8dff7;
-    border: 1px solid #ccc;
-    text-shadow: none;
-    overflow-x: auto;
-  }
-  
- code {
-    padding: 2px 4px;
-    background-color: #f8dff7;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    text-shadow: none;
-  }
-  
-pre code {
-    padding: 0;
-    font-size: inherit;
-    color: inherit;
-    white-space: pre-wrap;
-    background-color: transparent;
-    border-radius: 0;
-    border: 0;
-  }
+
 @media only screen and (max-width: 600px) {
-    #body  {
+    #center  {
       margin: 0.5rem auto;
       width: 95%;
   }
@@ -207,7 +224,7 @@ pre code {
     main{
         padding-top: 77px;
     }
-    #body  {
+    #center  {
         margin: 0 auto;
         width: 72%;
   }
@@ -221,18 +238,23 @@ pre code {
     #mei {
         margin: -1vh 0 1vh;
         height: 13rem;
-        background-color: #aaf0db;
-    }
-   
-    #mei #title #right {
-        float: right;
-        font-size: 14px;
-        margin-right: 2rem;
+        background-color: #ebf39e;
     }
     #mei h1 {
         line-height: 11rem;
         margin: 0 auto;
         padding: 0 4rem;
     }
+    #mei #title #save, #mei #title #like {
+        font-size: 15px;
+        margin-left: 4rem;
+        color: fuchsia;
+    }
+    #mei #title #right {
+        float: right;
+        font-size: 14px;
+        margin-right: 2rem;
+    }
+    
 }
 </style>

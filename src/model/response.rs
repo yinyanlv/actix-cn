@@ -78,6 +78,12 @@ pub struct UserCommentsMsgs {
     pub message : String,
     pub comments : Vec<Comment>,
 }
+#[derive(Deserialize,Serialize, Debug)]
+pub struct BlogLikeMsgs {
+    pub status: i32,
+    pub message : String,
+    pub number : i32,
+}
 impl ThemeAndCommentsMsgs {
     pub fn new() -> ThemeAndCommentsMsgs {
             ThemeAndCommentsMsgs{

@@ -38,7 +38,6 @@ pub struct CategoryThemePageList {
     pub category_name: String,
 }
 
-
 #[derive(Deserialize,Serialize, Debug, Clone)]
 pub struct CategoryThemeListResult {
     pub id: i32,

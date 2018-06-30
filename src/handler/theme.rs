@@ -5,8 +5,9 @@ use actix::*;
 use actix_web::*;
 use timeago;
 use chrono::{Utc, Datelike, Timelike, NaiveDateTime};
-use model::response::{ThemeListMsgs, Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs};
-use model::theme::{Theme, ThemeList,ThemePageList, ThemeListResult, ThemeId, NewTheme, ThemeNew, Comment, CommentReturn, NewComment, ThemeComment};
+use model::response::{ThemeListMsgs, Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs,BlogLikeMsgs};
+use model::theme::{Theme, ThemeList,ThemePageList, ThemeListResult, ThemeId, NewTheme, 
+           ThemeNew, Comment, CommentReturn, NewComment, ThemeComment,BlogSave, Save,NewSave,BlogLike};
 use model::category::Category;
 use model::db::ConnDsl;
 use model::user::User;
@@ -224,3 +225,39 @@ impl Handler<ThemeComment> for ConnDsl {
     }
 }
 
+impl Handler<BlogSave> for ConnDsl {
+    type Result = Result<Msgs, Error>;
+
+    fn handle(&mut self, blog_save: BlogSave, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::saves::dsl::*;
+
+        let newsave = NewSave {
+            theme_id: blog_save.theme_id,
+            user_id: blog_save.user_id,
+            created_at: Utc::now().naive_utc(),
+        };
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        diesel::insert_into(saves).values(&newsave).execute(conn).map_err(error::ErrorInternalServerError)?;
+        Ok(Msgs { 
+                status: 200,
+                message : "Save blog Successful.".to_string(),
+        })   
+    }
+}
+
+impl Handler<BlogLike> for ConnDsl {
+    type Result = Result<BlogLikeMsgs, Error>;
+
+    fn handle(&mut self, blog_like: BlogLike, _: &mut Self::Context) -> Self::Result {
+        use utils::schema::saves::dsl::*;
+
+        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
+        let blog = saves.filter(theme_id.eq(blog_like.theme_id)).load::<Save>(conn).map_err(error::ErrorInternalServerError)?;
+        let number = blog.len() as i32;
+        Ok(BlogLikeMsgs { 
+                status: 200,
+                message : "Query blog number Successful.".to_string(),
+                number: number,
+        })   
+    }
+}
