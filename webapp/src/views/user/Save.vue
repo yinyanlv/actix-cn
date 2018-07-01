@@ -1,5 +1,5 @@
 <template>
-    <div id="center">
+    <div id="usersave">
       <!-- <mnav id="mnav"></mnav> -->
       <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
       <div id="title">
@@ -13,7 +13,7 @@
       <main>
         <div id="container">
             <div id="body">
-                <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                <div id="items" v-for="(theme, index) in saves" :key="index">
                             <div id="item">
                                 <span id="item-title">
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
@@ -59,7 +59,7 @@ import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
-  name: 'center',
+  name: 'usersave',
   components: {
     "mnav": Mnav
   },
@@ -73,7 +73,7 @@ export default {
       Newpassword: '',
       ConfirmNewpassword: '',
       userupdate: false,
-      theme_list: ''
+      saves: ''
     }
   },
   mounted: function() {
@@ -93,7 +93,7 @@ export default {
         }) 
       }
       let data = { user_id : Number.parseInt(this.$route.params.id)}
-      fetch(URLprefix + 'api/user/id/themes',{
+      fetch(URLprefix + 'api/user/id/saves',{
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
@@ -102,8 +102,8 @@ export default {
                   mode: 'cors'
               }).then(response => response.json())
               .then(json => {
-                  this.theme_list = json.themes
-                  console.log(this.theme_list)
+                  this.saves = json.saves
+                  console.log(this.saves)
               })
               .catch((e) => {
                 console.log(e)
@@ -167,8 +167,7 @@ export default {
 
 <style scoped>
 #show {
-    background-color: #f1a3d6
-;
+    background-color: aquamarine;
 }
 
 #title {
@@ -182,25 +181,25 @@ export default {
 #body {
     background-color: #ffffff;
 }
-#center #content #items #right {
+#body #content #items #right {
   float: right;
 }
-#center #items #item {
+#body #items #item {
   padding: 2vh 0.6vw;
   border-bottom: 1px solid #f3e1f8;
 }
-#center #items #item-title a {
+#body #items #item-title a {
   font-size: 1.1rem;
   color: #0541af;
 }
-#center #office-title {
+#body #office-title {
   color: #b93bf3;
 }
-#center #items #right .col-name {
+#body #items #right .col-name {
     color: #7a097a;
     font-size: 0.8rem;
 }
-#center #items #right a {
+#body #items #right a {
   color: #0541af;
   font-size: 0.9rem;
 }

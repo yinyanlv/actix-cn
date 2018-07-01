@@ -1,5 +1,5 @@
 use model::user::User;
-use model::theme::{ThemeListResult, Theme, CommentReturn};
+use model::theme::{ThemeListResult, Theme, CommentReturn, Comment};
 use model::category::{Category, CategoryThemeListResult};
 
 pub enum MyError {
@@ -66,7 +66,31 @@ pub struct CategoryThemePageListMsgs {
     pub category_theme_list : Vec<CategoryThemeListResult>,
     pub theme_category_page_count: i32,
 }
-
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserThemesMsgs {
+    pub status: i32,
+    pub message : String,
+    pub themes : Vec<Theme>,
+}
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserCommentsMsgs {
+    pub status: i32,
+    pub message : String,
+    pub comments : Vec<Comment>,
+}
+#[derive(Deserialize,Serialize, Debug)]
+pub struct UserSavesMsgs {
+    pub status: i32,
+    pub message : String,
+    pub saves : Vec<Theme>,
+}
+#[derive(Deserialize,Serialize, Debug)]
+pub struct BlogLikeMsgs {
+    pub status: i32,
+    pub message : String,
+    pub number : i32,
+    pub saveorno : bool,
+}
 impl ThemeAndCommentsMsgs {
     pub fn new() -> ThemeAndCommentsMsgs {
             ThemeAndCommentsMsgs{

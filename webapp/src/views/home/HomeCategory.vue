@@ -16,10 +16,11 @@
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-if="$route.params.homecategory == 'blog' || $route.params.homecategory == 'best'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-else :href="'/a/'+ $route.params.homecategory + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a :href="'/a/category/' + theme.category_name">{{ theme.category_name }}</a></span>
+                                    <span id="info" class="col-name">{{ category_name }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -65,14 +66,19 @@ export default {
     return {
       theme_list: '',
       signin_user: '',
-      page_count: ''
+      page_count: '',
+      category_name: ''
     }
   },
   mounted: function() {
-       let category_name = this.$route.params.homecategory
+       let name = this.$route.params.homecategory
+       if (name == 'blog') this.category_name = '博客'
+       if (name == 'faq') this.category_name = '问答'
+       if (name == 'share') this.category_name = '分享'
+       if (name == 'job') this.category_name = '招聘'
        let data = { 
          page_id: 1,
-         category_name: category_name
+         category_name: this.$route.params.homecategory
        }
        fetch(URLprefix + "api/home/category_list/page_id",{
                   body: JSON.stringify(data), 
@@ -89,7 +95,8 @@ export default {
               })
               .catch((e) => {
                 console.log(e)
-              }) 
+              })       
+              
   }
 }
 </script>
@@ -130,6 +137,10 @@ main {
 }
 #center #office-title {
   color: #b93bf3;
+}
+#center #items #right .col-name {
+    color: #f16bf1;
+    font-size: 0.8rem;
 }
 #center #items #right a {
   color: #0541af;

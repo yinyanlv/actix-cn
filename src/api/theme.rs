@@ -2,7 +2,7 @@ use actix_web::{HttpMessage, HttpRequest, HttpResponse, State, Json, AsyncRespon
 use futures::future::Future;
 
 use api::index::AppState;
-use model::theme::{ThemeList, ThemePageList,ThemeNew, ThemeId, ThemeComment};
+use model::theme::{ThemeList, ThemePageList,ThemeNew, ThemeId, ThemeComment,BlogSave,BlogLike};
 
 pub fn theme_list(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
     req.state().db.send(ThemeList)
@@ -29,6 +29,7 @@ pub fn theme_page_list((theme_page_list, state): (Json<ThemePageList>, State<App
             }
         }).responder()
 }
+
 pub fn theme_new((theme_new, state): (Json<ThemeNew>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(ThemeNew{ 
             user_id: theme_new.user_id,
@@ -45,7 +46,6 @@ pub fn theme_new((theme_new, state): (Json<ThemeNew>, State<AppState>)) -> Futur
         }).responder()
 }
 
-
 pub fn theme_and_comments(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
     let header_theme_id = req.match_info().get("theme_id").unwrap();
     let theme_id: i32 = header_theme_id.parse().unwrap();
@@ -61,12 +61,39 @@ pub fn theme_and_comments(req: HttpRequest<AppState>) -> FutureResponse<HttpResp
        }).responder()
 }
 
-
 pub fn theme_add_comment((theme_comment, state): (Json<ThemeComment>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(ThemeComment{ 
             the_theme_id: theme_comment.the_theme_id.clone(),
             user_id: theme_comment.user_id.clone(),
             comment: theme_comment.comment.clone(),
+        })
+        .from_err()
+        .and_then(|res| {
+            match res {
+                Ok(msg) => Ok(HttpResponse::Ok().json(msg)),
+                Err(_) => Ok(HttpResponse::InternalServerError().into())
+            }
+        }).responder()
+}
+
+pub fn blog_save((blog_save, state): (Json<BlogSave>, State<AppState>)) -> FutureResponse<HttpResponse> {
+    state.db.send(BlogSave{ 
+            theme_id: blog_save.theme_id,
+            user_id: blog_save.user_id,
+        })
+        .from_err()
+        .and_then(|res| {
+            match res {
+                Ok(msg) => Ok(HttpResponse::Ok().json(msg)),
+                Err(_) => Ok(HttpResponse::InternalServerError().into())
+            }
+        }).responder()
+}
+
+pub fn blog_like((blog_like, state): (Json<BlogLike>, State<AppState>)) -> FutureResponse<HttpResponse> {
+    state.db.send(BlogLike{ 
+            theme_id: blog_like.theme_id,
+            user_id: blog_like.user_id,
         })
         .from_err()
         .and_then(|res| {

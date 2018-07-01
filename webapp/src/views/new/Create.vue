@@ -5,21 +5,9 @@
             <div id="container">
                 <div id="center">
                     <div id="content">
-                        <div id="top"><p>Crate Community</p></div><br>
-                        <div id="topic">
-                                <span  id="category">
-                                        <select name="community_category" v-model="CommunityCategory" id="category-control" >
-                                            <option value="muro">muro<span class="icon-arrow"></span></option>
-                                            <option v-bind:value="community_category" v-for="(community_category, index) in community_categorys" :key="index">
-                                                    {{community_category}}
-                                            </option>
-                                        </select>
-                                </span>
-                                <!-- <span id="title">
-                                        <input type="text" name="new_community_name" v-model="NewCommunityNmae" placeholder="Please input a new_community_name">
-                                </span> -->
-                        </div><br>
-                        <input type="text" name="community_name" v-model="CommunityNmae" placeholder="Input community_name"><br><br>
+                        <div id="top"><p>Crate Category</p></div><br>
+                        <input type="text" name="category_name_cn" v-model="CategoryNmaeCN" placeholder="中文表示"><br><br>
+                        <input type="text" name="category_name" v-model="CategoryNmae" placeholder="英文表示"><br><br>
                         <button type="submit" id="submit" @click="create" ><span class="tip"> Create </span></button>
                     </div>
                 </div>
@@ -40,33 +28,21 @@ export default {
     },
     data () {
         return {
-            CommunityCategory: '',
-            CommunityNmae: '',
-            NewCommunityNmae: '',
-            community_categorys: ''
+            CategoryNmae: '',
+            CategoryNmaeCN: ''
         }
-    },
-    mounted: function() {
-        fetch(URLprefix + 'api/community_categorys',{
-            method: 'GET',
-        }).then(response => response.json())
-        .then(json => {
-                this.community_categorys = json.community_categorys
-        }).catch((e) => {
-            console.log(e)
-        })
     },
     methods: {
         create () {
-            var community_category = this.CommunityCategory
-            var community_name = this.CommunityNmae
-            var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+            let category_name = this.CategoryNmae
+            let category_name_cn = this.CategoryNmaeCN
+            let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
             let data = { 
-                community_category: community_category,
-                create_user_id: user_id,
-                community_name: community_name
+                user_id: Number.parseInt(user_id),
+                category_name: category_name,
+                category_name_cn: category_name_cn
             }
-              fetch(URLprefix + 'api/community_new', {
+              fetch(URLprefix + 'api/category_new', {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
@@ -75,7 +51,7 @@ export default {
               }).then(response => response.json())
               .then(json => {
                     window.location.reload ( true )
-                    this.$router.push("/a/community/"+ community_name)
+                    this.$router.push("/")
               })
               .catch((e) => {
                 console.log(e)
@@ -91,7 +67,7 @@ main {
 }
 #top {
     line-height: 33px;
-    background-color:#d1f0e3;
+    background-color:#f5fdfa;
     border :1px solid #CAC1C1;
 }
 
@@ -110,7 +86,7 @@ main {
 button {
     width:63px; 
     line-height:30px;
-    background-color: aqua;
+    background-color: #FFFFFF;
     border :1px solid #a39c9c;
 }
 @media only screen and (max-width: 600px) {
@@ -146,6 +122,7 @@ button {
     #container #center {
         width: 80%;
         margin-right: 1rem;
+        background-color: #FFFFFF;
     }
    #container #side {
         flex: 1;

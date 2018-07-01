@@ -1,11 +1,11 @@
 <template>
-    <div id="center">
+    <div id="usercomment">
       <!-- <mnav id="mnav"></mnav> -->
       <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
       <div id="title">
           <ul>
-              <li><a :href="'/a/user/' + $route.params.id" id="theme-title">主题</a></li>
-              <li><a :href="'/a/user/' + $route.params.id + '/comment'" >评论</a></li>
+              <li><a :href="'/a/user/' + $route.params.id" >主题</a></li>
+              <li><a :href="'/a/user/' + $route.params.id + '/comment'" id="comment-title">评论</a></li>
               <li><a :href="'/a/user/' + $route.params.id + '/save'" >收藏</a></li>
               <li><a :href="'/a/user/' + $route.params.id + '/message'" >消息</a></li>
           </ul>
@@ -13,16 +13,15 @@
       <main>
         <div id="container">
             <div id="body">
-                <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                <div id="items" v-for="(comment, index) in comment_result" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a href=""> {{ comment.content }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a :href="'/a/user/' + theme.user_id">{{ username }}</a></span>
-                                    <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
-                                    <span id="info">{{ theme.view_count }}</span>
-                                    <span id="info"> {{ theme.created_at }} </span>
+                                    <span id="info"><a href="">{{ username }}</a></span>
+                                    <span id="info"><a href="">{{ comment.theme_id }}</a></span>
+                                    <span id="info"> {{ comment.created_at }} </span>
                                     <span >  •••  </span>
                                 </span> 
                             </div>
@@ -59,7 +58,7 @@ import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
-  name: 'center',
+  name: 'usercomment',
   components: {
     "mnav": Mnav
   },
@@ -73,7 +72,7 @@ export default {
       Newpassword: '',
       ConfirmNewpassword: '',
       userupdate: false,
-      theme_list: ''
+      comment_result: ''
     }
   },
   mounted: function() {
@@ -93,7 +92,7 @@ export default {
         }) 
       }
       let data = { user_id : Number.parseInt(this.$route.params.id)}
-      fetch(URLprefix + 'api/user/id/themes',{
+      fetch(URLprefix + 'api/user/id/comments',{
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
@@ -102,8 +101,8 @@ export default {
                   mode: 'cors'
               }).then(response => response.json())
               .then(json => {
-                  this.theme_list = json.themes
-                  console.log(this.theme_list)
+                  this.comment_result = json.comments
+                  console.log(this.comment_result)
               })
               .catch((e) => {
                 console.log(e)
@@ -167,40 +166,38 @@ export default {
 
 <style scoped>
 #show {
-    background-color: #f1a3d6
-;
+    background-color: aquamarine;
 }
-
 #title {
     line-height: 3.3rem;
     background-color: #faeaf5;
 }
-#title #theme-title {
+#title #comment-title {
     padding: 0.8vh 0.3vw 0.3vh;
     background-color: #f8c0f8;
 }
 #body {
     background-color: #ffffff;
 }
-#center #content #items #right {
+#body #content #items #right {
   float: right;
 }
-#center #items #item {
+#body #items #item {
   padding: 2vh 0.6vw;
   border-bottom: 1px solid #f3e1f8;
 }
-#center #items #item-title a {
+#body #items #item-title a {
   font-size: 1.1rem;
   color: #0541af;
 }
-#center #office-title {
+#body #office-title {
   color: #b93bf3;
 }
-#center #items #right .col-name {
+#body #items #right .col-name {
     color: #7a097a;
     font-size: 0.8rem;
 }
-#center #items #right a {
+#body #items #right a {
   color: #0541af;
   font-size: 0.9rem;
 }

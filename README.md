@@ -36,13 +36,17 @@ $ cd webapp
 $ npm install
 $ npm run build
 $ cd ..
-$ cargo run
+$ cargo run --release
 ```
 then open broswer 'http://localhost:8000/'
 
 ### <a name="screenshots"> What it looks like </a>
 
 <img alt="Home" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/home.png">
+
+<img alt="blog" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/blog.png">
+
+<img alt="user" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/user.png">
 
 ## Contribute
  

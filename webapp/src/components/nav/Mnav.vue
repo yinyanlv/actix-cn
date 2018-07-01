@@ -10,8 +10,10 @@
           <li> <router-link to="/a/explore" title="explore">explore</router-link></li>
       </div>
       <div id="rnav">
-          <li v-if="username"> 
+          <li v-if="username == 'admin'"> 
             <a href="/a/create" title="create">create</a>
+          </li>
+          <li v-if="username"> 
             <a href="/a/post" title="post">post</a>
             <a :href="'/a/user/' + user_id" title="username">{{username}}</a>
             <a href="/a/access" title="Logout" @click="logout">logout</a>

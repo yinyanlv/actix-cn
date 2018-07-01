@@ -9,6 +9,7 @@ pub struct Category {
     pub id: i32,
     pub user_id: i32,
     pub category_name: String,
+    pub category_name_cn: String,
     pub created_at: NaiveDateTime,
 }
 
@@ -17,6 +18,7 @@ pub struct Category {
 pub struct NewCategory<'a> {
     pub user_id: i32,
     pub category_name: &'a str,
+    pub category_name_cn: &'a str,
     pub created_at: NaiveDateTime,
 }
 
@@ -24,6 +26,7 @@ pub struct NewCategory<'a> {
 pub struct CategoryNew {
     pub user_id: i32,
     pub category_name: String,
+    pub category_name_cn: String,
 }
 
 #[derive(Deserialize,Serialize, Debug, Clone)]
@@ -34,7 +37,6 @@ pub struct CategoryThemePageList {
     pub page_id: i32,
     pub category_name: String,
 }
-
 
 #[derive(Deserialize,Serialize, Debug, Clone)]
 pub struct CategoryThemeListResult {

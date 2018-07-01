@@ -1,8 +1,8 @@
 use actix::*;
 use actix_web::*;
 use chrono::{Utc, NaiveDateTime};
-use utils::schema::{themes, comments};
-use model::response::{ThemeListMsgs, ThemePageListMsgs, ThemeAndCommentsMsgs, Msgs};
+use utils::schema::{themes, comments,saves};
+use model::response::{ThemeListMsgs, ThemePageListMsgs, ThemeAndCommentsMsgs, BlogLikeMsgs,Msgs};
 
 #[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable,QueryableByName)]
 #[table_name = "themes"]
@@ -45,6 +45,20 @@ pub struct NewComment<'a> {
     pub content: &'a str,
     pub created_at: NaiveDateTime,
 }
+#[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable)]
+pub struct Save {
+    pub id: i32,
+    pub theme_id: i32,
+    pub user_id: i32,
+    pub created_at: NaiveDateTime,
+}
+#[derive(Serialize,Deserialize,Insertable,Debug, Clone)]
+#[table_name="saves"]
+pub struct NewSave {
+    pub theme_id: i32,
+    pub user_id: i32,
+    pub created_at: NaiveDateTime,
+}
 
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeNew {
@@ -72,6 +86,16 @@ pub struct ThemeList;
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemePageList {
     pub page_id : i32,
+}
+#[derive(Deserialize,Serialize, Debug,Clone)]
+pub struct BlogSave {
+    pub user_id : i32,
+    pub theme_id : i32,
+}
+#[derive(Deserialize,Serialize, Debug,Clone)]
+pub struct BlogLike {
+    pub theme_id : i32,
+    pub user_id : i32,
 }
 
 #[derive(Deserialize,Serialize, Debug,Clone)]
@@ -117,6 +141,12 @@ impl Message for ThemeNew {
 }
 impl Message for ThemeComment {
     type Result = Result<Msgs, Error>;
+}
+impl Message for BlogSave {
+    type Result = Result<Msgs, Error>;
+}
+impl Message for BlogLike {
+    type Result = Result<BlogLikeMsgs, Error>;
 }
 
 impl Theme {
