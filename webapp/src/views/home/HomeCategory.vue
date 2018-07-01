@@ -16,7 +16,7 @@
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                   <a v-if="$route.params.homecategory == 'blog'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a v-if="$route.params.homecategory == 'blog' || $route.params.homecategory == 'best'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                   <a v-else :href="'/a/'+ $route.params.homecategory + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
