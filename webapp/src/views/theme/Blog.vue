@@ -238,16 +238,24 @@ hr {
     #mei {
         margin: -1vh 0 1vh;
         height: 13rem;
-        background-color: #ebf39e;
+        /* background-color: #40e0d0; */
+        background-color: #59C173;
     }
     #mei h1 {
         line-height: 11rem;
         margin: 0 auto;
         padding: 0 4rem;
     }
-    #mei #title #save, #mei #title #like {
+    #mei #title #save {
         font-size: 15px;
-        margin-left: 4rem;
+        margin-left: 5rem;
+        color: fuchsia;
+        padding: 0.8vh 0.3vw 0.2vh;
+        border: 0.1px solid fuchsia;
+    }
+    #mei #title #like {
+        font-size: 15px;
+        margin-left: 2rem;
         color: fuchsia;
     }
     #mei #title #right {

@@ -64,7 +64,7 @@ impl Handler<CategoryThemePageList> for ConnDsl {
             let mut themes_result = themes.filter(comment_count.eq(0)).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
             let theme_category_count = themes_result.len() as i32;
             let theme_category_page_count = (theme_category_count + PAGE_SIZE - 1) / PAGE_SIZE ;
-            let mut themes_page_result = sql_query("SELECT * FROM themes WHERE themes.comment_count == 0 ORDER BY themes.id DESC limit $1 OFFSET $2")
+            let mut themes_page_result = sql_query("SELECT * FROM themes WHERE themes.comment_count = 0 ORDER BY themes.id DESC limit $1 OFFSET $2")
                 .bind::<Integer, _>(PAGE_SIZE)
                 .bind::<Integer, _>((category_theme_page_list.page_id - 1) * PAGE_SIZE)
                 .load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
