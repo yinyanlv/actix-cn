@@ -166,7 +166,7 @@ export default {
 
 <style scoped>
 #show {
-    background-color: aquamarine;
+    background-color: #f1a3d6;
 }
 #title {
     line-height: 3.3rem;

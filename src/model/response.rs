@@ -48,6 +48,7 @@ pub struct ThemeAndCommentsMsgs {
     pub theme: Theme,
     pub theme_user: User,
     pub theme_category_name: String,
+    pub theme_category_name_cn: String,
     pub theme_rtime: String,
     pub theme_comments: Vec<CommentReturn>,
 }
@@ -97,6 +98,7 @@ impl ThemeAndCommentsMsgs {
                 theme: Theme::new(),
                 theme_user: User::new(),
                 theme_category_name: "".to_string(),
+                theme_category_name_cn: "".to_string(),
                 theme_rtime: "".to_string(),
                 theme_comments: vec![],
             }

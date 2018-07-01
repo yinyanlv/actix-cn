@@ -9,8 +9,8 @@
                             <span v-else id="saved">已收藏</span>
                             <span id="like">喜欢 <span id="likeid">{{like}} </span> </span>
                             <span id="right"> 
-                            <span id="info" class="first"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
-                            <span id="info"><a :href="'/a/user/' + theme_user.user_id">{{ theme_user.username }}</a></span> •   
+                            <span id="info" class="first"><a :href="'/a/home/' + theme_category_name">博客</a></span> • 
+                            <span id="info"><a :href="'/a/user/' + theme_user.id">{{ theme_user.username }}</a></span> •   
                             <span id="info">{{ theme_rtime }}</span>  
                             </span>
                     </div>
@@ -72,18 +72,13 @@ export default {
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
-        fetch(URLprefix + 'api/'+ this.$route.params.id,{
+        fetch(URLprefix + 'api/theme/'+ this.$route.params.id,{
             method: 'GET',
         }).then(response => response.json())
         .then(json => {
             this.theme = json.theme
             this.theme_user = json.theme_user
             this.theme_rtime = json.theme_rtime
-            if (json.theme_category_name == 'office') json.theme_category_name = '官方'
-            if (json.theme_category_name == 'blog') json.theme_category_name = '博客'
-            if (json.theme_category_name == 'faq') json.theme_category_name = '问答'
-            if (json.theme_category_name == 'share') json.theme_category_name = '分享'
-            if (json.theme_category_name == 'job') json.theme_category_name = '招聘'
             this.theme_category_name = json.theme_category_name
             this.theme_comments = json.theme_comments
         }).catch((e) => {
