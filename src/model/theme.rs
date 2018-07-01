@@ -95,6 +95,7 @@ pub struct BlogSave {
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct BlogLike {
     pub theme_id : i32,
+    pub user_id : i32,
 }
 
 #[derive(Deserialize,Serialize, Debug,Clone)]

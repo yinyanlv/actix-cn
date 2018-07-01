@@ -5,7 +5,8 @@
                 <div id="mei">
                     <div id="title">
                             <h1> {{ theme.title }} </h1> 
-                            <span id="save" @click="save">收藏</span>
+                            <span v-if="saveorno == 'false'" id="save" @click="save">收藏</span>
+                            <span v-else id="saved">已收藏</span>
                             <span id="like">喜欢 <span id="likeid">{{like}} </span> </span>
                             <span id="right"> 
                             <span id="info" class="first"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
@@ -62,10 +63,12 @@ export default {
             theme_rtime: '',
             theme_comments: '',
             signin_user: '',
-            like: ''
+            like: '',
+            saveorno: ''
         }
     },
     mounted: function() {
+        this.saveorno = 'false'
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
@@ -87,8 +90,10 @@ export default {
             console.log(e)
         })
         let theme_id = this.$route.params.id
+        var user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
         let data = { 
-            theme_id: Number.parseInt(theme_id)
+            theme_id: Number.parseInt(theme_id),
+            user_id: user_id
         }
         fetch(URLprefix + 'api/blog/like', {
                   body: JSON.stringify(data), 
@@ -100,6 +105,8 @@ export default {
               }).then(response => response.json())
               .then(json => {
                   this.like = json.number
+                  this.saveorno = json.saveorno
+                  console.log(this.saveorno)
               })
               .catch((e) => {
                 console.log(e)
@@ -246,12 +253,17 @@ hr {
         margin: 0 auto;
         padding: 0 4rem;
     }
-    #mei #title #save {
+    #mei #title #save, #mei #title #saved {
         font-size: 15px;
-        margin-left: 5rem;
-        color: fuchsia;
-        padding: 0.8vh 0.3vw 0.2vh;
+        margin-left: 4.1rem;
+        padding: 0.8vh 0.3vw 0.3vh 0.2vw;
+    }
+    #mei #title #save {
         border: 0.1px solid fuchsia;
+        color: fuchsia;
+    }
+    #mei #title #saved {
+        color: green;
     }
     #mei #title #like {
         font-size: 15px;

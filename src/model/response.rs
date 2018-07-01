@@ -89,6 +89,7 @@ pub struct BlogLikeMsgs {
     pub status: i32,
     pub message : String,
     pub number : i32,
+    pub saveorno : bool,
 }
 impl ThemeAndCommentsMsgs {
     pub fn new() -> ThemeAndCommentsMsgs {

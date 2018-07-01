@@ -252,12 +252,17 @@ impl Handler<BlogLike> for ConnDsl {
         use utils::schema::saves::dsl::*;
 
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let blog = saves.filter(theme_id.eq(blog_like.theme_id)).load::<Save>(conn).map_err(error::ErrorInternalServerError)?;
-        let number = blog.len() as i32;
+        let blog_nimber = saves.filter(theme_id.eq(blog_like.theme_id)).load::<Save>(conn).map_err(error::ErrorInternalServerError)?;
+        let number = blog_nimber.len() as i32;
+        let mut saveorno: bool = false;
+        for blog in blog_nimber {
+            if blog.user_id == blog_like.user_id { saveorno = true; break }
+        }
         Ok(BlogLikeMsgs { 
                 status: 200,
                 message : "Query blog number Successful.".to_string(),
                 number: number,
+                saveorno: saveorno,
         })   
     }
 }

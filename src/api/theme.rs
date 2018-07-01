@@ -93,6 +93,7 @@ pub fn blog_save((blog_save, state): (Json<BlogSave>, State<AppState>)) -> Futur
 pub fn blog_like((blog_like, state): (Json<BlogLike>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(BlogLike{ 
             theme_id: blog_like.theme_id,
+            user_id: blog_like.user_id,
         })
         .from_err()
         .and_then(|res| {
