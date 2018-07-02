@@ -61,8 +61,6 @@ fn main() {
             .resource("/api/user_delete", |r| { r.method(Method::GET).h(user_delete); })
             .resource("/api/user_update", |r| { r.method(Method::POST).with(user_update); })
             .resource("/api/user/id/themes", |r| { r.method(Method::POST).with(user_themes); })
-            .resource("/api/blog/save", |r| { r.method(Method::POST).with(blog_save); })
-            .resource("/api/blog/like", |r| { r.method(Method::POST).with(blog_like); })
             .resource("/api/user/id/comments", |r| { r.method(Method::POST).with(user_comments); })
             .resource("/api/user/id/saves", |r| { r.method(Method::POST).with(user_saves); })
             .resource("/api/theme_list", |r| { r.method(Method::GET).h(theme_list); })
@@ -71,7 +69,9 @@ fn main() {
             .resource("/api/home/category_list/page_id", |r| { r.method(Method::POST).with(category_theme_page_list); })
             .resource("/api/categorys", |r| { r.method(Method::GET).h(categorys); })
             .resource("/api/category_new", |r| { r.method(Method::POST).with(category_new); })
-            .resource("/api/{theme_id}", |r| { 
+            .resource("/api/blog/save", |r| { r.method(Method::POST).with(blog_save); })
+            .resource("/api/blog/like", |r| { r.method(Method::POST).with(blog_like); })
+            .resource("/api/theme/{theme_id}", |r| { 
                 r.method(Method::GET).h(theme_and_comments); 
                 r.method(Method::POST).with(theme_add_comment); 
             })

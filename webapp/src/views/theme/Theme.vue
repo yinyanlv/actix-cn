@@ -6,8 +6,8 @@
                     <div id="theme">
                         <div id="title">
                             <h2> {{ theme.title }} </h2> 
-                            <span id="info"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name }}</a></span> • 
-                            <span id="info"><a :href="'/a/user/' + theme_user.user_id">{{ theme_user.username }}</a></span> •   
+                            <span id="info"><a :href="'/a/home/' + theme_category_name">{{ theme_category_name_cn }}</a></span> • 
+                            <span id="info"><a :href="'/a/user/' + theme_user.id">{{ theme_user.username }}</a></span> •   
                             <span id="info">{{ theme_rtime }}</span>  
                         </div>
                         <div id="content" v-html="theme.content" ></div>
@@ -58,6 +58,7 @@ export default {
             theme: '',
             theme_user: '',
             theme_category_name: '',
+            theme_category_name_cn: '',
             theme_rtime: '',
             theme_comments: '',
             signin_user: ''
@@ -67,21 +68,16 @@ export default {
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
-        fetch(URLprefix + 'api/'+ this.$route.params.id,{
+        fetch(URLprefix + 'api/theme/'+ this.$route.params.id,{
             method: 'GET',
         }).then(response => response.json())
         .then(json => {
             this.theme = json.theme
             this.theme_user = json.theme_user
             this.theme_rtime = json.theme_rtime
-            if (json.theme_category_name == 'office') json.theme_category_name = '官方'
-            if (json.theme_category_name == 'blog') json.theme_category_name = '博客'
-            if (json.theme_category_name == 'faq') json.theme_category_name = '问答'
-            if (json.theme_category_name == 'share') json.theme_category_name = '分享'
-            if (json.theme_category_name == 'job') json.theme_category_name = '招聘'
+            this.theme_category_name_cn = json.theme_category_name_cn
             this.theme_category_name = json.theme_category_name
             this.theme_comments = json.theme_comments
-            console.log(this.theme.content)
         }).catch((e) => {
             console.log(e)
         })
@@ -96,7 +92,7 @@ export default {
           user_id: user_id,
           comment: comment
       }
-              fetch(URLprefix + 'api/' + this.$route.params.id, {
+              fetch(URLprefix + 'api/theme/' + this.$route.params.id, {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'

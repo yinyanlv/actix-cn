@@ -6,7 +6,7 @@
           <ul>
               <li><a :href="'/a/user/' + $route.params.id" id="theme-title">主题</a></li>
               <li><a :href="'/a/user/' + $route.params.id + '/comment'" >评论</a></li>
-              <li><a :href="'/a/user/' + $route.params.id + '/save'" >收藏</a></li>
+              <li><a :href="'/a/user/' + $route.params.id + '/save'" id="save-title" >收藏</a></li>
               <li><a :href="'/a/user/' + $route.params.id + '/message'" >消息</a></li>
           </ul>
       </div>
@@ -167,14 +167,14 @@ export default {
 
 <style scoped>
 #show {
-    background-color: aquamarine;
+    background-color: #f1a3d6;
 }
 
 #title {
     line-height: 3.3rem;
     background-color: #faeaf5;
 }
-#title #theme-title {
+#title #save-title {
     padding: 0.8vh 0.3vw 0.3vh;
     background-color: #f8c0f8;
 }

@@ -148,7 +148,9 @@ impl Handler<ThemeId> for ConnDsl {
                 let category_result =  categorys::table.filter(&categorys::id.eq(&themeid.category_id)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
                 match category_result {
                     Some(category_one) => {
-                        theme_and_comments.theme_category_name = category_one.category_name;},
+                        theme_and_comments.theme_category_name = category_one.category_name;
+                        theme_and_comments.theme_category_name_cn = category_one.category_name_cn;
+                        },
                     None => { println!("No theme_category"); },
                 }
                 theme_and_comments.theme_rtime = time(Utc::now().naive_utc(), themeid.created_at);
@@ -165,6 +167,7 @@ impl Handler<ThemeId> for ConnDsl {
             theme: theme_and_comments.theme,
             theme_user: theme_and_comments.theme_user,
             theme_category_name: theme_and_comments.theme_category_name,
+            theme_category_name_cn: theme_and_comments.theme_category_name_cn,
             theme_rtime: theme_and_comments.theme_rtime,
             theme_comments: theme_and_comments.theme_comments,
         })
