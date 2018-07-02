@@ -42,11 +42,11 @@ then open broswer 'http://localhost:8000/'
 
 ### <a name="screenshots"> What it looks like </a>
 
-<img alt="Home" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/home.png">
+<img alt="Home" width="900" src="./screenshots/home.png">
 
-<img alt="blog" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/blog.png">
+<img alt="blog" width="900" src="./screenshots/blog.png">
 
-<img alt="user" width="900" src="https://raw.githubusercontent.com/actix-cn/actix-cn/master/user.png">
+<img alt="user" width="900" src="./screenshots/user.png">
 
 ## Contribute
  
