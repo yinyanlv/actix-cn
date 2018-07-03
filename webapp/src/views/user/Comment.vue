@@ -16,12 +16,12 @@
                 <div id="items" v-for="(comment, index) in comment_result" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a href=""> {{ comment.content }} </a>
+                                  <a href=""> {{ comment.content }} </a>&emsp;
                                 </span>
                                 <span id="right">
-                                    <span id="info"><a href="">{{ username }}</a></span>
-                                    <span id="info"><a href="">{{ comment.theme_id }}</a></span>
-                                    <span id="info"> {{ comment.created_at }} </span>
+                                    <span id="info"><a href="">{{ username }}</a></span>&emsp;
+                                    <span id="info"><a href="">{{ comment.theme_id }}</a></span>&emsp;
+                                    <span id="info"> {{ comment.created_at }} </span>&emsp;
                                     <span >  •••  </span>
                                 </span> 
                             </div>

@@ -14,11 +14,11 @@
                     </div>
                     <hr>
                     <div id="comment">
-                        <div id="count" style="font-weight: bold; color: #b93bf3;">Comment &nbsp; {{ theme.comment_count }} </div>
+                        <div id="count">Comment &nbsp; {{ theme.comment_count }} </div>
                         <div v-for="(comment, index) in theme_comments" :key="index">
                             <div id="detail">
                                 <div id="infos">
-                                    <span id="info" >{{ index + 1 }} </span>
+                                    <span id="info" >{{ index + 1 }}&nbsp;</span>
                                     <span id="info"><a :href="'/a/user/' + comment.user_id">{{ comment.username }}</a></span> • <span id="info">{{ comment.rtime }}</span>
                                 </div>
                                 <div id="content" v-html="comment.content" > </div>
@@ -27,7 +27,7 @@
                     </div>
                     <hr>
                     <div id="reply" v-if="signin_user">
-                        <div id="write"> Write comment in markdwon! </div>
+                        <div id="write">先<a href="https://maxiang.io/" target="view_window">在线MD编辑/预览</a>，再复制过来 </div>
                         <textarea name="comment" v-model="Comment" placeholder="if you want @somebody for send a message in your comment, the rule is: 
                         1: the @ symbol can't be first position at line.(like: @somebodyxxxxx)
                         2: one position before the @ symbol can't be space(like: xxxxx @somebodyxxxxx)."></textarea><br>
@@ -121,6 +121,9 @@ main {
 a {
     color: #0541af;
 }
+#body #theme,#body #comment,#body #reply {
+    border-top: 1px solid fuchsia;
+}
 #body #theme > #title {
     margin-top: 2px;
     padding: 10px;
@@ -142,6 +145,8 @@ hr {
     border: 0;
 }
 #body #comment > #count {
+    font-weight: bold;
+    color: fuchsia;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
@@ -160,7 +165,7 @@ hr {
     margin: 10px;
 }
 #body #reply {
-    margin: 10px;
+    padding: 10px;
 }
 #body #reply #write {
     margin-bottom: 10px;
@@ -168,6 +173,7 @@ hr {
 #reply textarea {
     width:100%; 
     height: 200px;
+    border: 0.2px solid #d4d2d3;
 }
 #body #reply button {
     width:66px; 

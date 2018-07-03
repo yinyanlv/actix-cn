@@ -94,8 +94,7 @@ export default {
                     if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
                   }
                   this.theme_list = rusult
-                  this.page_count = json.theme_page_count
-                  console.log(this.theme_list)
+                    this.page_count = json.theme_page_count
               })
               .catch((e) => {
                 console.log(e)

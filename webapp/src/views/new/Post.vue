@@ -22,11 +22,12 @@
                                         <input type="text" name="title" v-model="Title" placeholder="Please input title">
                                 </span>
                             </div>    
-                            <div id="new">
-                                        <textarea name="content" v-model="Content" placeholder="Write new content in markdown!"></textarea>
+                            <div id="md">
+                                    <p>先<a href="https://maxiang.io/" target="view_window">在线MD编辑/预览</a>，再复制过来</p>
+                                    <textarea name="content" v-model="Content" ></textarea>
                             </div>
                             <div id="new">
-                                        <button type="submit" id="submit" @click="post" ><span class="tip"> Post </span></button>
+                                    <button type="submit" id="submit" @click="post" ><span class="tip"> Post </span></button>
                             </div>
                     </form>
                 </div>
@@ -134,11 +135,19 @@ form #topic-group #category #category-control {
 form #topic-group #category #category-control, form #topic-group input {
     height: 30px;
 }
-form #new textarea {
+form #md{
+    border: 0.1px solid rgb(138, 135, 135);
+}
+form #md a { 
+    color: rgb(0, 68, 255);
+}
+form #md textarea {
     width:100%; 
     height: 444px;
+    border-bottom: none;
 }
 form #new button {
+    margin-top: 0.3rem;
     width:63px; 
     line-height:25px;
     background-color:#FFFFFF;

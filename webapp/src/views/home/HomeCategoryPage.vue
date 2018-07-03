@@ -98,8 +98,7 @@ export default {
               }).then(response => response.json())
               .then(json => {
                   this.theme_list = json.category_theme_list
-                  this.page_count = json.theme_category_page_count
-                  console.log(this.theme_list)
+                    this.page_count = json.theme_page_count
               })
               .catch((e) => {
                 console.log(e)
