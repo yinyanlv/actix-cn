@@ -39,9 +39,9 @@
                             
                             <li >••</li>
 
-                            <li v-if="(page_count/2 - 3) > 2" ><a :href="'/a/home/page/' + (page_count/2 - 3)">{{ page_count/2 - 3 }}</a></li>
-                            <li v-if="page_count/2 > 2" ><a :href="'/a/home/page/' + page_count/2" >{{ page_count/2 }}</a></li>
-                            <li v-if="(page_count/2 + 3) < page_count" ><a :href="'/a/home/page/' + (page_count/2 + 3)" >{{ page_count/2 + 3 }}</a></li>
+                            <li v-if="(half_count - 3) > 2" ><a :href="'/a/home/page/' + (half_count - 3)">{{ half_count - 3 }}</a></li>
+                            <li v-if="half_count > 2" ><a :href="'/a/home/page/' + half_count" >{{ half_count }}</a></li>
+                            <li v-if="(half_count + 3) < page_count" ><a :href="'/a/home/page/' + (half_count + 3)" >{{ half_count + 3 }}</a></li>
 
                             <li >••</li>
 
@@ -70,7 +70,8 @@ export default {
   data: function() {
     return {
       theme_list: '',
-      page_count: ''
+      page_count: '',
+      half_count:''
     }
   },
   mounted: function() {
@@ -95,6 +96,7 @@ export default {
                   }
                   this.theme_list = rusult
                     this.page_count = json.theme_page_count
+                    this.half_count = Math.ceil(json.theme_page_count/2)
               })
               .catch((e) => {
                 console.log(e)
