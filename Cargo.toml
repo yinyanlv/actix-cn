@@ -21,7 +21,7 @@ http = "^0.1.0"
 postgres = {version= "^0.15.0", features = ["with-chrono"]}
 dotenv = "^0.10.0"
 chrono = { version = "0.4", features = ["serde"] }
-bcrypt = "^0.1.0"
+bcrypt = "^0.2"
 env_logger = "^0.5.0"
 futures = "^0.1.0"
 ring = "0.12.1"
