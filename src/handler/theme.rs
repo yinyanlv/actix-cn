@@ -77,11 +77,13 @@ impl Handler<ThemePageList> for ConnDsl {
                 }
                 themes_list.push(themes_list_one);
             }
+            let category_list =  categorys::table.load::<Category>(conn).map_err(error::ErrorInternalServerError)?;
             Ok(ThemePageListMsgs { 
                 status: 200,
                 message : "theme_list result.".to_string(),
                 theme_list: themes_list,
-                theme_page_count: theme_page_count
+                theme_page_count: theme_page_count,
+                categorys: category_list,
             })
     }
 }

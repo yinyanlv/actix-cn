@@ -5,16 +5,17 @@
           <div id="center">
               <div id="header">
                 <li  id="first"><a href="/a/home/best" >最美</a></li>
-                <li  ><a href="/a/home/blog" >博客</a></li>
                 <li  ><a href="/" >全部</a></li>
-                <li  ><a href="/a/home/faq" >问答</a></li>
-                <li  ><a href="/a/home/share" >分享</a></li>
-                <li  ><a href="/a/home/job" >招聘</a></li>
+                <span v-for="(category, index) in categorys" :key="index">
+                    <li v-if="category.category_name != 'office'">
+                      <a :href="'/a/home/' + category.category_name" >{{ category.category_name_cn }}</a>
+                    </li>
+                </span>
                 <li  ><a href="/a/home/care" >未回复</a></li>
               </div>
               <div id="content">
-                      <div id="items" v-for="(theme, index) in theme_page_list" :key="index">
-                            <div id="office" v-if="theme.category_name_cn === '官方'">
+                      <div id="items" v-for="(theme, index) in theme_list" :key="index">
+                            <div id="office" v-if="theme.category_name === 'office'">
                                 <span id="office-title">
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
@@ -28,11 +29,10 @@
                                 </span> 
                             </div>
                       </div>
-                      <div id="items" v-for="theme in theme_page_list">
-                            <div id="item" v-if="theme.category_name_cn !== '官方'">
+                      <div id="items" v-for="theme in theme_list">
+                            <div id="item" v-if="theme.category_name !== 'office'">
                                 <span id="item-title">
-                                  <a v-if="theme.category_name == '博客'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
-                                  <a v-else :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
                                     <span id="info" class="col-name">{{ theme.category_name_cn }}</span>
@@ -80,9 +80,9 @@ export default {
   data: function() {
     return {
       theme_list: '',
-      theme_page_list: '',
       signin_user: '',
       page_count: '',
+      categorys: '',
       half_count:''
     }
   },
@@ -99,7 +99,8 @@ export default {
               .then(json => {
                   this.page_count = json.theme_page_count
                   this.half_count = Math.ceil(json.theme_page_count/2)
-                  this.theme_page_list = json.theme_list
+                  this.theme_list = json.theme_list
+                  this.categorys = json.categorys
               })
               .catch((e) => {
                 console.log(e)

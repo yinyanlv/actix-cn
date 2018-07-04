@@ -1,6 +1,6 @@
 use model::user::User;
 use model::theme::{ThemeListResult, Theme, CommentReturn, Comment};
-use model::category::{Category, CategoryThemeListResult};
+use model::category::Category;
 
 pub enum MyError {
     NotFound,
@@ -27,6 +27,7 @@ pub struct ThemePageListMsgs {
     pub message : String,
     pub theme_list: Vec<ThemeListResult>,
     pub theme_page_count: i32,
+    pub categorys: Vec<Category>,
 }
 
 #[derive(Deserialize,Serialize, Debug)]
@@ -53,13 +54,6 @@ pub struct CategorysMsgs {
     pub categorys : Vec<Category>,
 }
 
-#[derive(Deserialize,Serialize, Debug)]
-pub struct CategoryThemePageListMsgs {
-    pub status: i32,
-    pub message : String,
-    pub category_theme_list : Vec<CategoryThemeListResult>,
-    pub theme_category_page_count: i32,
-}
 #[derive(Deserialize,Serialize, Debug)]
 pub struct UserThemesMsgs {
     pub status: i32,

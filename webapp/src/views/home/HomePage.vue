@@ -5,22 +5,22 @@
           <div id="center">
               <div id="header">
                 <li  id="first"><a href="/a/home/best" >最美</a></li>
-                <li  ><a href="/a/home/blog" >博客</a></li>
                 <li  ><a href="/" >全部</a></li>
-                <li  ><a href="/a/home/faq" >问答</a></li>
-                <li  ><a href="/a/home/share" >分享</a></li>
-                <li  ><a href="/a/home/job" >招聘</a></li>
+                <span v-for="(category, index) in categorys" :key="index">
+                    <li v-if="category.category_name != 'office'">
+                      <a :href="'/a/home/' + category.category_name" >{{ category.category_name_cn }}</a>
+                    </li>
+                </span>
                 <li  ><a href="/a/home/care" >未回复</a></li>
               </div>
               <div id="content">
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a v-if="theme.category_name == '博客'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
-                                  <a v-else :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info" class="col-name">{{ theme.category_name }}</span>
+                                    <span id="info" class="col-name">{{ theme.category_name_cn }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -71,7 +71,8 @@ export default {
     return {
       theme_list: '',
       page_count: '',
-      half_count:''
+      half_count:'',
+      categorys: ''
     }
   },
   mounted: function() {
@@ -90,6 +91,7 @@ export default {
                     this.theme_list = json.theme_list
                     this.page_count = json.theme_page_count
                     this.half_count = Math.ceil(json.theme_page_count/2)
+                    this.categorys = json.categorys
               })
               .catch((e) => {
                 console.log(e)
