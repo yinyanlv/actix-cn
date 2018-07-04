@@ -13,13 +13,13 @@
                 <li  ><a href="/a/home/care" >未回复</a></li>
               </div>
               <div id="content">
-                      <div id="items" v-for="(theme, index) in theme_list" :key="index">
-                            <div id="office" v-if="theme.category_name === '官方'">
+                      <div id="items" v-for="(theme, index) in theme_page_list" :key="index">
+                            <div id="office" v-if="theme.category_name_cn === '官方'">
                                 <span id="office-title">
                                   <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info" class="col-name">{{ theme.category_name }}</span>
+                                    <span id="info" class="col-name">{{ theme.category_name_cn }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -29,13 +29,13 @@
                             </div>
                       </div>
                       <div id="items" v-for="theme in theme_page_list">
-                            <div id="item" v-if="theme.category_name !== '官方'">
+                            <div id="item" v-if="theme.category_name_cn !== '官方'">
                                 <span id="item-title">
                                   <a v-if="theme.category_name == '博客'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                   <a v-else :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info" class="col-name">{{ theme.category_name }}</span>
+                                    <span id="info" class="col-name">{{ theme.category_name_cn }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -87,22 +87,6 @@ export default {
     }
   },
   mounted: function() {
-            fetch(URLprefix + 'api/theme_list',{
-                  method: 'GET',
-              }).then(response => response.json())
-              .then(json => {
-                  let rusult = json.theme_list
-                  for (let index = 0; index < rusult.length; index++) {
-                    if (rusult[index].category_name == 'office') {
-                        rusult[index].category_name = '官方'
-                    }
-                  }
-                  this.theme_list = rusult
-              })
-              .catch((e) => {
-                console.log(e)
-              })
-
              let data = { page_id: 1}
              fetch(URLprefix + 'api/theme_list/page_id',{
                  body: JSON.stringify(data), 
@@ -115,14 +99,7 @@ export default {
               .then(json => {
                   this.page_count = json.theme_page_count
                   this.half_count = Math.ceil(json.theme_page_count/2)
-                  let rusult = json.theme_list
-                  for (let index = 0; index < rusult.length; index++) {
-                    if (rusult[index].category_name == 'blog') rusult[index].category_name = '博客'
-                    if (rusult[index].category_name == 'faq') rusult[index].category_name = '问答'
-                    if (rusult[index].category_name == 'share')  rusult[index].category_name = '分享'
-                    if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
-                  }
-                  this.theme_page_list = rusult
+                  this.theme_page_list = json.theme_list
               })
               .catch((e) => {
                 console.log(e)

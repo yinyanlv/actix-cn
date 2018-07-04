@@ -175,8 +175,8 @@ export default {
     background-color: #faeaf5;
 }
 #title #save-title {
-    padding: 0.8vh 0.3vw 0.3vh;
-    background-color: #f8c0f8;
+    padding-bottom: 0.2rem;
+    border-bottom: 3px solid #a506a5;
 }
 #body {
     background-color: #ffffff;

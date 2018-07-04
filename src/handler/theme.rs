@@ -5,63 +5,13 @@ use actix::*;
 use actix_web::*;
 use timeago;
 use chrono::{Utc, Datelike, Timelike, NaiveDateTime};
-use model::response::{ThemeListMsgs, Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs,BlogLikeMsgs};
-use model::theme::{Theme, ThemeList,ThemePageList, ThemeListResult, ThemeId, NewTheme, 
+use model::response::{Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs,BlogLikeMsgs};
+use model::theme::{Theme,ThemePageList, ThemeListResult, ThemeId, NewTheme, 
            ThemeNew, Comment, CommentReturn, NewComment, ThemeComment,BlogSave, Save,NewSave,BlogLike};
 use model::category::Category;
 use model::db::ConnDsl;
 use model::user::User;
 use utils::{time, markdown_to_html, state::PAGE_SIZE};
-
-impl Handler<ThemeList> for ConnDsl {
-    type Result = Result<ThemeListMsgs, Error>;
-
-    fn handle(&mut self, theme_list: ThemeList, _: &mut Self::Context) -> Self::Result {
-        use utils::schema::themes::dsl::*;
-        use utils::schema::users;
-        use utils::schema::categorys;
-        let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let mut themes_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-        let theme_count = themes_result.len() as i32;
-        let theme_page_count = (theme_count + PAGE_SIZE - 1) / PAGE_SIZE ;
-        let mut themes_page_result = sql_query("SELECT * FROM themes ORDER BY themes.id ASC limit $1 OFFSET $2")
-            .bind::<Integer, _>(PAGE_SIZE)
-            .bind::<Integer, _>(0)
-            .load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-        let mut themes_list: Vec<ThemeListResult> = vec![];
-        for theme_one in themes_page_result {
-                let mut themes_list_one = ThemeListResult::new();
-                themes_list_one.id = theme_one.id;
-                themes_list_one.user_id = theme_one.user_id;
-                themes_list_one.category_id = theme_one.category_id;
-                themes_list_one.theme_status = theme_one.theme_status;
-                themes_list_one.title = theme_one.title;
-                themes_list_one.content = theme_one.content;
-                themes_list_one.view_count = theme_one.view_count;
-                themes_list_one.comment_count = theme_one.comment_count;
-                themes_list_one.created_at = theme_one.created_at;
-                let rtime = time( Utc::now().naive_utc(), theme_one.created_at);
-                themes_list_one.rtime = rtime;
-                let category_result =  categorys::table.filter(categorys::id.eq(theme_one.category_id)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
-                match category_result {
-                    Some(category_one) => { themes_list_one.category_name = category_one.category_name; },
-                    None => { println!("No category result");},
-                }
-                let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
-                match theme_user {
-                    Some(user) => { themes_list_one.username = user.username;},
-                    None => { println!("No theme_user result");},
-                }
-                themes_list.push(themes_list_one);
-            }
-            Ok(ThemeListMsgs { 
-                status: 200,
-                message : "theme_list result.".to_string(),
-                theme_list: themes_list,
-                theme_page_count: theme_page_count
-            })
-    }
-}
 
 impl Handler<ThemePageList> for ConnDsl {
     type Result = Result<ThemePageListMsgs, Error>;
@@ -70,16 +20,36 @@ impl Handler<ThemePageList> for ConnDsl {
         use utils::schema::themes::dsl::*;
         use utils::schema::users;
         use utils::schema::categorys;
+        
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
-        let mut themes_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
-        let theme_count = themes_result.len() as i32;
+        let mut themes_all_result = themes.order(id).load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        let theme_count = themes_all_result.len() as i32;
         let theme_page_count = (theme_count + PAGE_SIZE - 1) / PAGE_SIZE ;
+        let mut themes_office_result: Vec<Theme> = vec![];
+        for themes_office in themes_all_result {
+            if themes_office.category_id == 1 {
+                themes_office_result.push(themes_office.clone())
+            }
+        }
         let mut themes_page_result = sql_query("SELECT * FROM themes WHERE themes.category_id <> 1 ORDER BY themes.id DESC limit $1 OFFSET $2")
             .bind::<Integer, _>(PAGE_SIZE)
             .bind::<Integer, _>((theme_page_list.page_id - 1) * PAGE_SIZE)
             .load::<Theme>(conn).map_err(error::ErrorInternalServerError)?;
+        let mut themes_list_result: Vec<Theme> = vec![];
+        if theme_page_list.page_id == 1 {
+            for theme_office in  themes_office_result {
+                themes_list_result.push(theme_office);
+            }
+            for them_no_office in themes_page_result {
+                themes_list_result.push(them_no_office);
+            }
+        }else{
+            for them_no_office in themes_page_result {
+                themes_list_result.push(them_no_office);
+            }
+        }
         let mut themes_list: Vec<ThemeListResult> = vec![];
-        for theme_one in themes_page_result {
+        for theme_one in themes_list_result {
                 let mut themes_list_one = ThemeListResult::new();
                 themes_list_one.id = theme_one.id;
                 themes_list_one.user_id = theme_one.user_id;
@@ -94,7 +64,10 @@ impl Handler<ThemePageList> for ConnDsl {
                 themes_list_one.rtime = rtime;
                 let category_result =  categorys::table.filter(categorys::id.eq(theme_one.category_id)).load::<Category>(conn).map_err(error::ErrorInternalServerError)?.pop();
                 match category_result {
-                    Some(category_one) => { themes_list_one.category_name = category_one.category_name; },
+                    Some(category_one) => { 
+                        themes_list_one.category_name = category_one.category_name;
+                        themes_list_one.category_name_cn = category_one.category_name_cn;
+                    },
                     None => { println!("No category result");},
                 }
                 let theme_user =  users::table.filter(users::id.eq(theme_one.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();

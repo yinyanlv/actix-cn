@@ -2,20 +2,7 @@ use actix_web::{HttpMessage, HttpRequest, HttpResponse, State, Json, AsyncRespon
 use futures::future::Future;
 
 use api::index::AppState;
-use model::theme::{ThemeList, ThemePageList,ThemeNew, ThemeId, ThemeComment,BlogSave,BlogLike};
-
-pub fn theme_list(req: HttpRequest<AppState>) -> FutureResponse<HttpResponse> {
-    req.state().db.send(ThemeList)
-        .from_err()
-        .and_then(|res| {
-            match res {
-                Ok(msg) =>
-                    Ok(HttpResponse::Ok().json(msg)),
-                Err(_) =>
-                    Ok(HttpResponse::InternalServerError().into()),
-            }
-        }).responder()
-}
+use model::theme::{ThemePageList,ThemeNew, ThemeId, ThemeComment,BlogSave,BlogLike};
 
 pub fn theme_page_list((theme_page_list, state): (Json<ThemePageList>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(ThemePageList{ 

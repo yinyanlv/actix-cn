@@ -167,17 +167,15 @@ export default {
 
 <style scoped>
 #show {
-    background-color: #f1a3d6
-;
+    background-color: #f1a3d6;
 }
-
 #title {
     line-height: 3.3rem;
     background-color: #faeaf5;
 }
 #title #theme-title {
-    padding: 0.8vh 0.3vw 0.3vh;
-    background-color: #f8c0f8;
+    padding-bottom: 0.2rem;
+    border-bottom: 3px solid #a506a5;
 }
 #body {
     background-color: #ffffff;
@@ -276,6 +274,7 @@ button {
       margin-left: 14vw;
       width: 8rem;
       height: 8rem;
+      border-radius: 50%;
   }
   #title ul {
       margin-left: 12vw;

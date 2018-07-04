@@ -22,13 +22,6 @@ pub struct SigninMsgs {
 }
 
 #[derive(Deserialize,Serialize, Debug)]
-pub struct ThemeListMsgs {
-    pub status: i32,
-    pub message : String,
-    pub theme_list: Vec<ThemeListResult>,
-    pub theme_page_count: i32,
-}
-#[derive(Deserialize,Serialize, Debug)]
 pub struct ThemePageListMsgs {
     pub status: i32,
     pub message : String,

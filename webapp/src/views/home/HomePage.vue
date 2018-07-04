@@ -87,14 +87,7 @@ export default {
                   mode: 'cors'
               }).then(response => response.json())
               .then(json => {
-                  let rusult = json.theme_list
-                  for (let index = 0; index < rusult.length; index++) {
-                    if (rusult[index].category_name == 'blog') rusult[index].category_name = '博客'
-                    if (rusult[index].category_name == 'faq') rusult[index].category_name = '问答'
-                    if (rusult[index].category_name == 'share')  rusult[index].category_name = '分享'
-                    if (rusult[index].category_name == 'job') rusult[index].category_name = '招聘'
-                  }
-                  this.theme_list = rusult
+                    this.theme_list = json.theme_list
                     this.page_count = json.theme_page_count
                     this.half_count = Math.ceil(json.theme_page_count/2)
               })
