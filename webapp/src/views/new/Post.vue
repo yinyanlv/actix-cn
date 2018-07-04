@@ -22,10 +22,13 @@
                                         <input type="text" name="title" v-model="Title" placeholder="Please input title">
                                 </span>
                             </div>    
-                            <div id="md">
+                            <div id="editor">
+                                <mavon-editor name="content" v-model="Content" style="height: 100%;" :toolbars="set"></mavon-editor>
+                            </div>
+                            <!-- <div id="md">
                                     <p>先<a href="https://maxiang.io/" target="view_window">在线MD编辑/预览</a>，再复制过来</p>
                                     <textarea name="content" v-model="Content" ></textarea>
-                            </div>
+                            </div> -->
                             <div id="new">
                                     <button type="submit" id="submit" @click="post" ><span class="tip"> Post </span></button>
                             </div>
@@ -39,12 +42,15 @@
 
 <script>
 /* eslint-disable */
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import URLprefix from '../../config'
 import Side from '../../components/side/Side'
 export default {
     name: 'post',
     components: {
-        "side": Side
+        "side": Side,
+        mavonEditor
     },
     data () {
         return {
@@ -53,10 +59,43 @@ export default {
             category_names_admin: '',
             CategoryName: '',
             Title: '',
-            Content: ''
+            Content: '',
+            set:{
+                bold: true, // 粗体
+                italic: true, // 斜体
+                header: true, // 标题
+                underline: true, // 下划线
+                strikethrough: true, // 中划线
+                mark: true, // 标记
+                quote: true, // 引用
+                ol: true, // 有序列表
+                ul: true, // 无序列表
+                link: true, // 链接
+                code: true, // code
+                trash: true, // 清空
+                table: true, // 表格
+                fullscreen: true, // 全屏编辑
+                alignleft: true, // 左对齐
+                aligncenter: true, // 居中
+                alignright: true, // 右对齐
+                preview: true, // 预览
+                help: true, // 帮助
+
+                superscript: false, // 上角标
+                subscript: false, // 下角标
+                undo: false, // 上一步
+                redo: false, // 下一步
+                imagelink: false, // 图片链接
+                readmodel: false, // 沉浸式阅读
+                htmlcode: false, // 展示html源码
+                save: false, // 保存（触发events中的save事件）
+                navigation: false, // 导航目录
+                subfield: false, // 单双栏模式
+            }
         }
     },
     mounted: function() {
+        let md = mavonEditor.getMarkdownIt() 
         var username = JSON.parse(sessionStorage.getItem('signin_user')).username
         this.username = username
               fetch(URLprefix + 'api/categorys', {
@@ -135,7 +174,11 @@ form #topic-group #category #category-control {
 form #topic-group #category #category-control, form #topic-group input {
     height: 30px;
 }
-form #md{
+#editor {
+    margin: auto;
+    height: 555px;
+}
+/* form #md{
     border: 0.1px solid rgb(138, 135, 135);
 }
 form #md a { 
@@ -143,9 +186,9 @@ form #md a {
 }
 form #md textarea {
     width:100%; 
-    height: 444px;
+    
     border-bottom: none;
-}
+} */
 form #new button {
     margin-top: 0.3rem;
     width:63px; 
