@@ -3,7 +3,7 @@
    <!-- <mnav id="mnav"></mnav> -->
    <div id="content">
         <div id="title">    
-            <router-link to="/a/access">Sign In &emsp;|&emsp;</router-link>
+            <router-link to="/a/access">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
             <router-link to="/a/signup">Sign Up</router-link> 
         </div> 
           <input type="text" name="username" placeholder="Username" v-model="Username"  required />
@@ -78,11 +78,10 @@ export default {
   padding-top: 33px;
 }
 #title {
-    padding: 0.5rem 0;
+    padding: 0.5rem 4px;
     font-size: 22px;
     font-weight: bold;
     background-color:bisque;
-    text-align: center;
 }
 input[type="text"],
 input[type="password"] {
@@ -95,9 +94,9 @@ input[type="password"] {
 }
 #submit  {
   margin: 10px 0 20px 0;
-  width: 250px;
+  width: 253px;
   height: 33px;
-  background-color:bisque;
+  background-color:rgb(248, 211, 166);
   border: none;
   border-radius: 2px;
   font-family: 'Roboto', sans-serif;

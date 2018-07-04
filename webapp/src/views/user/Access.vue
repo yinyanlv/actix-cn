@@ -3,17 +3,22 @@
       <!-- <mnav id="mnav"></mnav> -->
       <div id="content">
           <div id="title">    
-            <router-link to="/a/access">Sign In &emsp;|&emsp;</router-link>
+            <router-link to="/a/access">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
             <router-link to="/a/signup">Sign Up</router-link> 
           </div>
             <input type="text" name="username" placeholder="Username" v-model="Username" />
             <input type="password" name="password" placeholder="Password" v-model="Password" /><br/>
           <div id="add">
             <label class="checkbox">
-            <input type="checkbox" name="remember" value="1" id="checks" checked="true"/>
-            <span class="check" for="checks"></span> 
-          </label>Remember
-          <span> &emsp;&emsp;<router-link to="/settings/missing_pwd" style="text-decoration-line: none;">Forgot Password?</router-link></span><br/>
+              <input type="checkbox" name="remember" value="1" id="checks" checked="true"/>
+              <span class="check" for="checks"></span> 
+            </label>Remember
+            <span> &emsp;&emsp;<router-link to="/settings/missing_pwd" style="text-decoration-line: none;">Forgot Password?</router-link></span><br/>
+          </div>
+          <div>
+              <div id="v_container" style="height: 44px;"></div>
+              <input type="text" id="code_input" value="" placeholder="请输入验证码" style="width: 80%;"/>
+              <span><button id="my_button" style="width: 20%; padding: 6px 0;background-color: bisque;">验证</button></span>
           </div>
           <button id="submit" @click="signin">Sign in</button><br/>
           <div id="text"> Login with social </div>
@@ -27,6 +32,7 @@
 <script>
 /* eslint-disable */
 import URLprefix from '../../config'
+import  '../../../static/js/gVerify.js'
 import Mnav from '../../components/nav/Mnav'
 export default {
   name: 'access',
@@ -39,6 +45,19 @@ export default {
       Password: ''
     }
   },
+  mounted: function() {
+    var verifyCode = new GVerify("v_container");
+    document.getElementById("my_button").onclick = function () {
+      var res = verifyCode.validate(document.getElementById("code_input").value);
+      if (res) {
+        let verify = document.getElementById("my_button")
+        verify.innerHTML = "成功"
+      } else {
+        let verify = document.getElementById("my_button")
+        verify.innerHTML = "失败"
+      }
+    }
+  },
   methods: {
     signin () {
       var username = this.Username
@@ -47,7 +66,8 @@ export default {
           username: username,
           password: password
       }
-      fetch(URLprefix + 'user/signin', {
+      if (document.getElementById("my_button").innerHTML == "成功") {
+            fetch(URLprefix + 'user/signin', {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
@@ -55,14 +75,22 @@ export default {
                   method: 'POST',
               }).then(response => response.json())
               .then(json => {
-                    sessionStorage.setItem('token',json.token);
-                    sessionStorage.setItem('signin_user',JSON.stringify(json.signin_user));
-                    window.location.reload ( true ); 
-                    this.$router.push('/')
+                    if (json.status == 200) {
+                        sessionStorage.setItem('token',json.token);
+                        sessionStorage.setItem('signin_user',JSON.stringify(json.signin_user));
+                        window.location.reload ( true ); 
+                        this.$router.push('/')
+                    }else{
+                        alert(json.message)
+                    }
               })
               .catch((e) => {
                 console.log(e)
               })
+      }else{
+          alert("请先成功通过验证码再登陆.")
+      }
+              
     }
   }
 }
@@ -76,8 +104,7 @@ export default {
     padding-top: 33px;
 }
 #title {
-    padding: 0.5rem 0;
-    text-align: center;
+    padding: 0.5rem 4px;
     font-size: 22px;
     font-weight: bold;
     background-color:bisque;
@@ -92,7 +119,7 @@ input[type="password"] {
   font-size: 16px;
 }
 #add {
-  margin-top: 10px;
+  margin: 10px 0;
 }
 #submit  {
   margin: 10px 0;
@@ -114,7 +141,7 @@ input[type="password"] {
 }
 button.social-signin {
   margin: 10px 0;
-  width: 80.5px;
+  width: 83.3px;
   height: 33px;
   border: none;
   border-radius: 2px;
