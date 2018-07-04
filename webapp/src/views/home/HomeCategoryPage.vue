@@ -82,6 +82,8 @@ export default {
        if (name == 'faq') this.category_name = '问答'
        if (name == 'share') this.category_name = '分享'
        if (name == 'job') this.category_name = '招聘'
+       if (name == 'best') this.category_name = '博客'
+       if (name == 'care') this.category_name = '未回复'
     let home_page_id = this.$route.params.number
     let category_name = this.$route.params.homecategory
     let data = { 

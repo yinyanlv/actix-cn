@@ -176,7 +176,7 @@ form #topic-group #category #category-control, form #topic-group input {
 }
 #editor {
     margin: auto;
-    height: 555px;
+    height: 444px;
 }
 /* form #md{
     border: 0.1px solid rgb(138, 135, 135);
