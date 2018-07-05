@@ -275,6 +275,7 @@ button {
       margin-left: 14vw;
       width: 8rem;
       height: 8rem;
+      border-radius: 50%;
   }
   #title ul {
       margin-left: 12vw;

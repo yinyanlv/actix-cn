@@ -183,9 +183,8 @@ impl Handler<ThemeComment> for ConnDsl {
     fn handle(&mut self, theme_comment: ThemeComment, _: &mut Self::Context) -> Self::Result {
         use utils::schema::comments::dsl::*;
         use utils::schema::themes;
-        let the_theme_id: i32 = theme_comment.the_theme_id.to_owned().parse().map_err(error::ErrorBadRequest)?;
         let new_comment = NewComment {
-            theme_id: the_theme_id,
+            theme_id: theme_comment.theme_id,
             user_id: theme_comment.user_id,
             content: &theme_comment.comment,
             created_at: Utc::now().naive_utc(),
@@ -193,7 +192,7 @@ impl Handler<ThemeComment> for ConnDsl {
         let conn = &self.0.get().map_err(error::ErrorInternalServerError)?;
         diesel::insert_into(comments).values(&new_comment).execute(conn).map_err(error::ErrorInternalServerError)?;
         diesel::update(themes::table)
-            .filter(&themes::id.eq(&the_theme_id))
+            .filter(themes::id.eq(theme_comment.theme_id))
             .set((themes::comment_count.eq(themes::comment_count + 1),))
             .execute(conn).map_err(error::ErrorInternalServerError)?;
         Ok(Msgs { 

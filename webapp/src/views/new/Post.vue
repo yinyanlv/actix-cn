@@ -26,7 +26,7 @@
                                 <mavon-editor name="content" v-model="Content" :ishljs = "true" style="height: 100%;" :toolbars="set"></mavon-editor>
                             </div>
                             <div id="new">
-                                    <button type="submit" id="submit" @click="post" ><span class="tip"> Post </span></button>
+                                    <button type="submit" id="submit" @click="post" >Post</button>
                             </div>
                     </form>
                 </div>
@@ -101,14 +101,7 @@ export default {
                     this.categorys = json.categorys
                     let category_names_admin = []
                     let category_names = []
-                    this.categorys.map((item) => category_names_admin.push(item.category_name))
-                    for (let index = 0; index < category_names_admin.length; index++) {
-                        if (category_names_admin[index] == 'office') category_names_admin[index] = '官方'
-                        if (category_names_admin[index] == 'blog') category_names_admin[index] = '博客'
-                        if (category_names_admin[index] == 'faq') category_names_admin[index] = '问答'
-                        if (category_names_admin[index] == 'share')  category_names_admin[index] = '分享'
-                        if (category_names_admin[index] == 'job') category_names_admin[index] = '招聘'
-                    }
+                    this.categorys.map((item) => category_names_admin.push(item.category_name_cn))
                     this.category_names_admin = category_names_admin
                     category_names_admin.filter((item) => { if (item != '官方') category_names.push(item)})
                     this.category_names = category_names

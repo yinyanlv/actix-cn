@@ -37,7 +37,12 @@
                         <div id="editor">
                             <mavon-editor name="content" v-model="Content" :ishljs = "true" style="height: 100%;" :toolbars="set"></mavon-editor>
                         </div>
-                        <div id="submit" @click="comment">Comment</div>
+                        <button style="margin-top: 1vh;
+                                        width:66px; 
+                                        line-height:25px;
+                                        background-color:#ffffff;
+                                        border :1px solid #a39c9c;" type="submit" id="submit" @click="comment">Comment
+                        </button>
                     </div>  
                     <div v-else style="margin: 10px;">Please login first and make a Comment.
                         <a href="/a/access" style="background-color:aqua;">Login</a>
@@ -50,8 +55,8 @@
 
 <script>
 /* eslint-disable */
-// import  '../../../static/js/github.min.css'
-// import  '../../../static/css/gVerify.js'
+import  '../../../static/css/github.min.css'
+import  '../../../static/js/highlight.min.js'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import URLprefix from '../../config'
@@ -62,7 +67,7 @@ export default {
     },
     data: function() {
         return {
-            Comment: '',
+            Content: '',
             theme: '',
             theme_user: '',
             theme_category_name: '',
@@ -149,20 +154,21 @@ export default {
   },
   methods: {
     comment () {
-        let comment = this.Comment
+        let comment = this.Content
         let theme_id = this.$route.params.id
         let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
         let data = {
-            the_theme_id: theme_id,
-            user_id: user_id,
+            theme_id: Number.parseInt(theme_id),
+            user_id: Number.parseInt(user_id),
             comment: comment
         }
-        fetch(URLprefix + 'api/' + this.$route.params.id, {
+        fetch(URLprefix + 'api/theme/' + this.$route.params.id, {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
                   },
                   method: 'POST',
+                  mode: 'cors'
               }).then(response => response.json())
               .then(json => {
                   console.log(json)
@@ -247,13 +253,6 @@ export default {
 #theblog #editor {
     margin: auto;
     height: 333px;
-}
-#theblog #center #reply #submit {
-    margin-top: 1vh;
-    width:66px; 
-    line-height:25px;
-    background-color:#ffffff;
-    border :1px solid #a39c9c;
 }
 #theblog pre {
     display: block;

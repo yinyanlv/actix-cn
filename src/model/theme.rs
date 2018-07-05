@@ -75,8 +75,8 @@ pub struct ThemeId {
 
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeComment {
+    pub theme_id: i32,
     pub user_id: i32,
-    pub the_theme_id: String,
     pub comment: String,
 }
 
