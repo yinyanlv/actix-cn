@@ -1,8 +1,8 @@
 <template>
     <div id="theme">
-        <main>
+        <main id="main">
             <div id="container">
-                <div id="body">
+                <div id="center">
                     <div id="theme">
                         <div id="title">
                             <h2> {{ theme.title }} </h2> 
@@ -28,13 +28,9 @@
                     <hr>
                     <div id="reply" v-if="signin_user">
                         <div id="editor">
-                            <mavon-editor name="content" v-model="Content" style="height: 100%;" :toolbars="set"></mavon-editor>
+                            <mavon-editor name="content" v-model="Content" :ishljs = "true" style="height: 100%;" :toolbars="set"></mavon-editor>
                         </div>
-                        <!-- <div id="write">先<a href="https://maxiang.io/" target="view_window">在线MD编辑/预览</a>，再复制过来 </div>
-                        <textarea name="comment" v-model="Comment" placeholder="if you want @somebody for send a message in your comment, the rule is: 
-                        1: the @ symbol can't be first position at line.(like: @somebodyxxxxx)
-                        2: one position before the @ symbol can't be space(like: xxxxx @somebodyxxxxx)."></textarea> -->
-                        <button id="submit" @click="comment">Comment</button>
+                        <div id="submit" @click="comment">Comment</div>
                     </div>  
                     <div v-else style="margin: 10px;">Please login first and make a Comment.
                         <a href="/a/access" style="background-color:aqua;">Login</a>
@@ -150,101 +146,96 @@ export default {
 }
 </script>
 
-<style scoped>
-main {
+<style>
+#main {
     padding-bottom: 44px;
 }
-#body {
+#main #center {
     background-color: #ffffff;
 }
-a {
+#main a {
     color: #0541af;
 }
-#body #theme,#body #comment,#body #reply {
+#main #center #theme, #main #center #comment, #main #center #reply {
     border-top: 1px solid fuchsia;
 }
-#body #theme > #title {
+#main #center #theme > #title {
     margin-top: 2px;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #theme > #title h2 { 
+#main #center #theme > #title h2 { 
     padding-bottom: 0.3rem;
 }
-#body #theme > #title #info {
+#main #center #theme > #title #info {
     display: inline-block;
     font-size: 14px;
 }
-#body #theme > #content {
+#main #center #theme > #content {
     margin: 10px;
 }
-hr {
+#main hr {
     height: 11px;
     background-color: #faf5f5;
     border: 0;
 }
-#body #comment > #count {
+#main #center #comment > #count {
     font-weight: bold;
     color: fuchsia;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail {
+#main #center #comment #detail {
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail #infos{
+#main #center #comment #detail #infos{
     margin: 10px;
     margin-bottom: 10px;
 }
-#body #comment #detail #info{
+#main #center #comment #detail #info{
     display: inline-block;
     font-size: 14px;
 }
-#body #comment #detail #content {
+#main #center #comment #detail #content {
     margin: 10px;
 }
-#editor {
+#main #editor {
     margin: auto;
     height: 333px;
 }
-/* #body #reply #write {
-    margin-bottom: 10px;
-}
-#reply textarea {
-    width:100%; 
-    height: 200px;
-    border: 0.2px solid #d4d2d3;
-} */
-#body #reply button {
+#main #center #reply #submit {
     margin-top: 1vh;
     width:66px; 
     line-height:25px;
     background-color:#ffffff;
     border :1px solid #a39c9c;
 }
-pre {
+
+#main pre {
     display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 1.42857143;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 13.3px;
+    line-height: 1.5;
+    color: var(--purple);
     word-break: break-all;
     word-wrap: break-word;
-    background-color: #f8dff7;
-    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    border: 1px solid rgb(246, 226, 252);
     text-shadow: none;
-    overflow-x: auto;
-  }
-  
- code {
+}
+
+#main code {
     padding: 2px 4px;
-    background-color: #f8dff7;
+    font-size: 90%;
+    background-color: #f5f5f5;
     border-radius: 4px;
     border: 1px solid #ccc;
+    color: var(--purple);
     text-shadow: none;
-  }
-  
-pre code {
+}
+
+#main pre code {
     padding: 0;
     font-size: inherit;
     color: inherit;
@@ -252,37 +243,37 @@ pre code {
     background-color: transparent;
     border-radius: 0;
     border: 0;
-  }
+}
 @media only screen and (max-width: 600px) {
-    #body  {
+    #main #center  {
       margin: 0.5rem auto;
       width: 95%;
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
-    main{
+    #main{
         padding-top: 77px;
     }
-    #body  {
+    #main #center  {
         margin: 0 auto;
         width: 72%;
   }
 }
 @media only screen and (min-width: 1000px) {
-    main {
+    #main {
         margin: 0 auto;
         width: 72%;
         padding-top: 77px;
     }
-    #container {
+    #main #container {
       display: flex;
       flex-flow: row;
     }
-    #container #body {
+    #main #container #center {
         width: 80%;
         margin-right: 1rem;
     }
-    #container #side {
+    #main #container #side {
         flex: 1;
     }
 }

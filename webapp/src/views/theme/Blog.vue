@@ -1,11 +1,11 @@
 <template>
-    <div id="blog">
+    <div id="theblog">
         <main>
             <div id="container">
                 <div id="mei">
                     <div id="title">
                             <h1> {{ theme.title }} </h1> 
-                            <span v-if="saveorno == 'false'" id="save" @click="save">收藏</span>
+                            <span v-if="saveorno == false" id="save" @click="save">收藏</span>
                             <span v-else id="saved">已收藏</span>
                             <span id="like">喜欢 <span id="likeid">{{like}} </span> </span>
                             <span id="right"> 
@@ -35,13 +35,9 @@
                     <hr>
                     <div id="reply" v-if="signin_user">
                         <div id="editor">
-                            <mavon-editor name="content" v-model="Content" style="height: 100%;" :toolbars="set"></mavon-editor>
+                            <mavon-editor name="content" v-model="Content" :ishljs = "true" style="height: 100%;" :toolbars="set"></mavon-editor>
                         </div>
-                        <!-- <div id="write"> 先<a href="https://maxiang.io/" target="view_window">在线MD编辑/预览</a>，再复制过来</div>
-                        <textarea name="comment" v-model="Comment" placeholder="if you want @somebody for send a message in your comment, the rule is: 
-                        1: the @ symbol can't be first position at line.(like: @somebodyxxxxx)
-                        2: one position before the @ symbol can't be space(like: xxxxx @somebodyxxxxx)."></textarea> -->
-                        <button id="submit" @click="comment">Comment</button>
+                        <div id="submit" @click="comment">Comment</div>
                     </div>  
                     <div v-else style="margin: 10px;">Please login first and make a Comment.
                         <a href="/a/access" style="background-color:aqua;">Login</a>
@@ -54,11 +50,13 @@
 
 <script>
 /* eslint-disable */
+// import  '../../../static/js/github.min.css'
+// import  '../../../static/css/gVerify.js'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import URLprefix from '../../config'
 export default {
-    name: 'blog',
+    name: 'theblog',
     components: {
         mavonEditor
     },
@@ -109,7 +107,7 @@ export default {
     },
     mounted: function() {
         let md = mavonEditor.getMarkdownIt() 
-        this.saveorno = 'false'
+        this.saveorno = false
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
@@ -142,6 +140,7 @@ export default {
               .then(json => {
                   this.like = json.number
                   this.saveorno = json.saveorno
+                  console.log("hello")
                   console.log(this.saveorno)
               })
               .catch((e) => {
@@ -204,117 +203,141 @@ export default {
 }
 </script>
 
-<style scoped>
-main {
+<style>
+#theblog main {
     padding-bottom: 44px;
 }
-#center {
+#theblog #center {
     background-color: #ffffff;
 }
-a {
+#theblog a {
     color: #0541af;
 }
-#body #comment,#body #reply {
+#theblog #center #comment, #theblog #center #reply {
     border-top: 1px solid fuchsia;
 }
-#center #theme > #content {
+#theblog #center #theme > #content {
     margin: 10px;
 }
-hr {
+#theblog hr {
     height: 11px;
     background-color: #faf5f5;
     border: 0;
 }
-#center #comment > #count {
+#theblog #center #comment > #count {
     font-weight: bold;
     color: fuchsia;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#center #comment #detail {
+#theblog #center #comment #detail {
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#center #comment #detail #infos{
+#theblog #center #comment #detail #infos{
     margin: 10px;
     margin-bottom: 10px;
 }
-#center #comment #detail #info{
+#theblog #center #comment #detail #info{
     display: inline-block;
     font-size: 14px;
 }
-#center #comment #detail #content {
+#theblog #center #comment #detail #content {
     margin: 10px;
 }
-#editor {
+#theblog #editor {
     margin: auto;
     height: 333px;
 }
-/* #center #reply #write {
-    margin-bottom: 10px;
-}
-#reply textarea {
-    width:100%; 
-    height: 200px;
-    border: 0.2px solid #d4d2d3;
-} */
-#center #reply button {
+#theblog #center #reply #submit {
     margin-top: 1vh;
     width:66px; 
     line-height:25px;
     background-color:#ffffff;
     border :1px solid #a39c9c;
 }
+#theblog pre {
+    display: block;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 13.3px;
+    line-height: 1.5;
+    color: var(--purple);
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid rgb(246, 226, 252);
+    text-shadow: none;
+}
 
+#theblog code {
+    padding: 2px 4px;
+    font-size: 90%;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    color: var(--purple);
+    text-shadow: none;
+}
+
+#theblog pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
+}
 @media only screen and (max-width: 600px) {
-    #center  {
+    #theblog #center  {
       margin: 0.5rem auto;
       width: 95%;
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
-    main{
+    #theblog main{
         padding-top: 77px;
     }
-    #center  {
+    #theblog #center  {
         margin: 0 auto;
         width: 72%;
   }
 }
 @media only screen and (min-width: 1000px) {
-    main {
+   #theblog main {
         margin: 0 auto;
         width: 66%;
         padding-top: 77px;
     }
-    #mei {
+    #theblog #mei {
         margin: -1vh 0 1vh;
         height: 13rem;
         /* background-color: #40e0d0; */
         background-color: #59C173;
     }
-    #mei h1 {
+    #theblog #mei h1 {
         line-height: 11rem;
         margin: 0 auto;
         padding: 0 4rem;
     }
-    #mei #title #save, #mei #title #saved {
+    #theblog #mei #title #save, #theblog #mei #title #saved {
         font-size: 15px;
         margin-left: 4.1rem;
         padding: 0.8vh 0.3vw 0.3vh 0.2vw;
     }
-    #mei #title #save {
+    #theblog #mei #title #save {
         border: 0.1px solid fuchsia;
         color: fuchsia;
     }
-    #mei #title #saved {
+    #theblog #mei #title #saved {
         color: green;
     }
-    #mei #title #like {
+    #theblog #mei #title #like {
         font-size: 15px;
         margin-left: 2rem;
         color: fuchsia;
     }
-    #mei #title #right {
+    #theblog #mei #title #right {
         float: right;
         font-size: 14px;
         margin-right: 2rem;
