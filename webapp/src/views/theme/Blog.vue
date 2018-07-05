@@ -157,8 +157,10 @@ export default {
         let comment = this.Content
         let theme_id = this.$route.params.id
         let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+        let theme_user_id = this.theme_user.id
         let data = {
             theme_id: Number.parseInt(theme_id),
+            theme_use_id: Number.parseInt(theme_user_id),
             user_id: Number.parseInt(user_id),
             comment: comment
         }

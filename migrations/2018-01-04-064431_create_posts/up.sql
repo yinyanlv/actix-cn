@@ -90,7 +90,6 @@ CREATE TABLE  categorys (
   CREATE TABLE messages (
   id SERIAL NOT NULL PRIMARY KEY,
   theme_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
   from_user_id INTEGER NOT NULL,
   to_user_id INTEGER NOT NULL,
   content TEXT NOT NULL,

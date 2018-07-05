@@ -9,6 +9,7 @@ use model::response::{Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs,BlogLikeMsgs
 use model::theme::{Theme,ThemePageList, ThemeListResult, ThemeId, NewTheme, 
            ThemeNew, Comment, CommentReturn, NewComment, ThemeComment,BlogSave, Save,NewSave,BlogLike};
 use model::category::Category;
+use model::message::{Message, NewMessage};
 use model::db::ConnDsl;
 use model::user::User;
 use utils::{time, markdown_to_html, state::PAGE_SIZE};
@@ -183,6 +184,7 @@ impl Handler<ThemeComment> for ConnDsl {
     fn handle(&mut self, theme_comment: ThemeComment, _: &mut Self::Context) -> Self::Result {
         use utils::schema::comments::dsl::*;
         use utils::schema::themes;
+        use utils::schema::messages;
         let new_comment = NewComment {
             theme_id: theme_comment.theme_id,
             user_id: theme_comment.user_id,
@@ -195,6 +197,16 @@ impl Handler<ThemeComment> for ConnDsl {
             .filter(themes::id.eq(theme_comment.theme_id))
             .set((themes::comment_count.eq(themes::comment_count + 1),))
             .execute(conn).map_err(error::ErrorInternalServerError)?;
+        let new_message = NewMessage {
+            theme_id: theme_comment.theme_id,
+            from_user_id: theme_comment.user_id,
+            to_user_id: theme_comment.theme_user_id,
+            content: &theme_comment.comment,
+            created_at: Utc::now().naive_utc(),
+        };
+        diesel::insert_into(messages::table).values(&new_message).execute(conn).map_err(error::ErrorInternalServerError)?;
+        // @别人（不是theme作者）
+        
         Ok(Msgs { 
                 status: 200,
                 message : "Comment Add Successful.".to_string(),

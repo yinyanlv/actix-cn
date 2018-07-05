@@ -51,6 +51,7 @@ pub fn theme_and_comments(req: HttpRequest<AppState>) -> FutureResponse<HttpResp
 pub fn theme_add_comment((theme_comment, state): (Json<ThemeComment>, State<AppState>)) -> FutureResponse<HttpResponse> {
     state.db.send(ThemeComment{ 
             theme_id: theme_comment.theme_id,
+            theme_user_id: theme_comment.theme_user_id,
             user_id: theme_comment.user_id,
             comment: theme_comment.comment.clone(),
         })
