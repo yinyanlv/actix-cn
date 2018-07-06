@@ -12,6 +12,7 @@ extern crate env_logger;
 extern crate dotenv;
 extern crate chrono;
 extern crate bcrypt;
+extern crate regex;
 extern crate http;
 extern crate ring;
 extern crate data_encoding;

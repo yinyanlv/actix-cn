@@ -4,6 +4,7 @@ use diesel::sql_types::Integer;
 use actix::*;
 use actix_web::*;
 use timeago;
+use regex::{Regex, Captures};
 use chrono::{Utc, Datelike, Timelike, NaiveDateTime};
 use model::response::{Msgs, ThemeAndCommentsMsgs, ThemePageListMsgs,BlogLikeMsgs};
 use model::theme::{Theme,ThemePageList, ThemeListResult, ThemeId, NewTheme, 
@@ -112,7 +113,7 @@ impl Handler<ThemeId> for ConnDsl {
                     comment_list_one.user_id = comment.user_id;
                     comment_list_one.content = markdown_to_html(&comment.content);
                     comment_list_one.created_at = comment.created_at;
-                    let comment_user = users::table.filter(&users::id.eq(comment.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
+                    let comment_user = users::table.filter(users::id.eq(comment.user_id)).load::<User>(conn).map_err(error::ErrorInternalServerError)?.pop();
                     match comment_user {
                             Some(someuser) => {  
                             comment_list_one.username = someuser.username; },
@@ -185,6 +186,8 @@ impl Handler<ThemeComment> for ConnDsl {
         use utils::schema::comments::dsl::*;
         use utils::schema::themes;
         use utils::schema::messages;
+        use utils::schema::users;
+
         let new_comment = NewComment {
             theme_id: theme_comment.theme_id,
             user_id: theme_comment.user_id,
@@ -204,9 +207,38 @@ impl Handler<ThemeComment> for ConnDsl {
             content: &theme_comment.comment,
             created_at: Utc::now().naive_utc(),
         };
-        diesel::insert_into(messages::table).values(&new_message).execute(conn).map_err(error::ErrorInternalServerError)?;
+        if theme_comment.user_id != theme_comment.theme_user_id {
+            diesel::insert_into(messages::table).values(&new_message).execute(conn).map_err(error::ErrorInternalServerError)?;
+        }else {
+            println!("you comment yourelf's theme No need send message");
+        }
         // @别人（不是theme作者）
-        
+        let reg = Regex::new(r"\B@([\d0-9A-Za-z_]+)").unwrap();
+        let mut mentions: Vec<u16> = Vec::new();
+        let comment_content = reg.replace_all(&(theme_comment.comment), |caps: &Captures| {
+                let user_name = caps.get(1).unwrap().as_str();
+                let user_result = users::table.filter(&users::username.eq(&user_name)).load::<User>(conn).map_err(error::ErrorInternalServerError).unwrap();
+                let to_user_id = (user_result[0].id) as u16;
+                if to_user_id == 0 {
+                    format!("@{}", user_name)
+                } else {
+                    mentions.push(to_user_id);
+
+                    format!("[@{}]({}{})", user_name, "/user/", user_name)
+                }
+        });
+        mentions.sort();
+        mentions.dedup();
+        for to_user_id in mentions.iter().filter(|&uid| *uid != ((theme_comment.theme_user_id) as u16) && *uid != ((theme_comment.user_id) as u16)) {
+            let new_message = NewMessage {
+                theme_id: theme_comment.theme_id,
+                from_user_id: theme_comment.user_id,
+                to_user_id: *to_user_id as i32,
+                content: &theme_comment.comment,
+                created_at: Utc::now().naive_utc(),
+            };
+            diesel::insert_into(messages::table).values(&new_message).execute(conn).map_err(error::ErrorInternalServerError)?;
+        }
         Ok(Msgs { 
                 status: 200,
                 message : "Comment Add Successful.".to_string(),
