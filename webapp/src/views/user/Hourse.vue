@@ -1,7 +1,6 @@
 <template>
-    <div id="center">
-      <!-- <mnav id="mnav"></mnav> -->
-      <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
+    <div id="hourse">
+      <div id="show"><img src="../../../static/imgs/ruster.png" /></div>
       <div id="title">
           <ul>
               <li><a :href="'/a/user/' + $route.params.id" id="theme-title">主题</a></li>
@@ -12,19 +11,19 @@
       </div>
       <main>
         <div id="container">
-            <div id="body">
+            <div id="center">
                 <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
-                                <span id="item-title">
-                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
-                                </span>
-                                <span id="right">
+                                <div id="infos">
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
                                     <span id="info"> {{ theme.created_at }} </span>
                                     <span >  •••  </span>
-                                </span> 
+                                </div> 
+                                <div id="item-title">
+                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                </div>
                             </div>
                       </div>
             </div>
@@ -59,7 +58,7 @@ import URLprefix from '../../config'
 import auth from '../../utils/auth'
 import Mnav from '../../components/nav/Mnav'
 export default {
-  name: 'center',
+  name: 'hourse',
   components: {
     "mnav": Mnav
   },
@@ -112,7 +111,7 @@ export default {
   methods: {
     login() {
         window.location.reload ( true ); 
-        this.$router.push('/a/access')
+        this.$router.push('/a/signin')
     },
     update() {
         this.userupdate = true
@@ -177,30 +176,22 @@ export default {
     padding-bottom: 0.2rem;
     border-bottom: 3px solid #a506a5;
 }
-#body {
+#container a{
+    color: #0541af;
+}
+#center {
     background-color: #ffffff;
 }
-#center #content #items #right {
-  float: right;
-}
 #center #items #item {
-  padding: 2vh 0.6vw;
-  border-bottom: 1px solid #f3e1f8;
+    padding: 1.2vh 0.5vw;
+    border-bottom: 1px solid #f3e1f8;
 }
-#center #items #item-title a {
-  font-size: 1.1rem;
-  color: #0541af;
+#center #items #item-title {
+    margin-top: 1vh;
+    font-size: 1.1rem;
 }
-#center #office-title {
-  color: #b93bf3;
-}
-#center #items #right .col-name {
-    color: #7a097a;
-    font-size: 0.8rem;
-}
-#center #items #right a {
-  color: #0541af;
-  font-size: 0.9rem;
+#center #items #infos {
+    font-size: 0.9rem;
 }
 button {
     width: 7rem; 
@@ -219,11 +210,11 @@ button {
       padding-left: 1rem;
       font-weight: bold;
   }
-  #body  {
+  #center  {
       margin: 1rem;
       width: 95%;
   }
-  #body #container #right {
+  #center #container #right {
       margin: 1rem auto;
   }
 }
@@ -246,53 +237,54 @@ button {
   #title ul #item {
       padding-left: 2rem;
   }
-  #body  {
+  #center  {
       margin: 0 auto;
       width: 80%;
       padding-top: 2rem;
   }
-  #body #container {
+  #center #container {
     display: flex;
     flex-flow: row;
   }
-  #body #container #left {
+  #center #container #left {
       width: 80%;
       padding-right: 1rem;
   }
-  #body #container #right {
+  #center #container #right {
       flex: 1;
   }
-  #body #container #left #update {
+  #center #container #left #update {
     margin: 2rem auto;
   }
 }
 @media only screen and (min-width: 1000px) {
-  #show {
-      padding-top: 6rem;
-  }
-  img {
-      margin-left: 14vw;
-      width: 8rem;
-      height: 8rem;
-      border-radius: 50%;
-  }
-  #title ul {
-      margin-left: 12vw;
-  }
-  #title ul li{
-      display: inline-block;
-      font-weight: bold;
-      padding-left: 2rem;
-  }
+    #show {
+        padding-top: 6rem;
+    }
+    img {
+        margin-left: 13vw;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+    }
+    #title ul {
+        margin-left: 12vw;
+    }
+    #title ul li{
+        display: inline-block;
+        font-weight: bold;
+        padding-left: 2rem;
+    }
    main {
         margin: 1rem auto;
+        padding-bottom: 1rem;
         width: 72%;
     }
     #container {
       display: flex;
       flex-flow: row;
     }
-    #container #body {
+    #container #center {
         width: 80%;
         margin-right: 1rem;
     }

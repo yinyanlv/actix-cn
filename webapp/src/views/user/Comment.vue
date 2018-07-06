@@ -1,7 +1,6 @@
 <template>
     <div id="usercomment">
-      <!-- <mnav id="mnav"></mnav> -->
-      <div id="show"><img src="https://sfault-avatar.b0.upaiyun.com/327/537/3275374482-59ebf6fe6c1ce_huge256" /></div>
+      <div id="show"><img src="../../../static/imgs/ruster.png" /></div>
       <div id="title">
           <ul>
               <li><a :href="'/a/user/' + $route.params.id" >主题</a></li>
@@ -12,18 +11,18 @@
       </div>
       <main>
         <div id="container">
-            <div id="body">
+            <div id="center">
                 <div id="items" v-for="(comment, index) in comment_result" :key="index">
                             <div id="item">
-                                <span id="item-title">
-                                  <a href=""> {{ comment.content }} </a>&emsp;
-                                </span>
-                                <span id="right">
+                                <div id="infos">
                                     <span id="info"><a href="">{{ username }}</a></span>&emsp;
                                     <span id="info"><a href="">{{ comment.theme_id }}</a></span>&emsp;
                                     <span id="info"> {{ comment.created_at }} </span>&emsp;
                                     <span >  •••  </span>
-                                </span> 
+                                </div> 
+                                <div id="item-title">
+                                  <a href=""> {{ comment.content }} </a>&emsp;
+                                </div>
                             </div>
                       </div>
             </div>
@@ -111,7 +110,7 @@ export default {
   methods: {
     login() {
         window.location.reload ( true ); 
-        this.$router.push('/a/access')
+        this.$router.push('/a/signin')
     },
     update() {
         this.userupdate = true
@@ -176,30 +175,22 @@ export default {
     padding-bottom: 0.2rem;
     border-bottom: 3px solid #a506a5;
 }
-#body {
+#container a{
+    color: #0541af;
+}
+#center {
     background-color: #ffffff;
 }
-#body #content #items #right {
-  float: right;
+#center #items #item {
+    padding: 1.2vh 0.5vw;
+    border-bottom: 1px solid #f3e1f8;
 }
-#body #items #item {
-  padding: 2vh 0.6vw;
-  border-bottom: 1px solid #f3e1f8;
+#center #items #item-title {
+    margin-top: 1vh;
+    font-size: 1.1rem;
 }
-#body #items #item-title a {
-  font-size: 1.1rem;
-  color: #0541af;
-}
-#body #office-title {
-  color: #b93bf3;
-}
-#body #items #right .col-name {
-    color: #7a097a;
-    font-size: 0.8rem;
-}
-#body #items #right a {
-  color: #0541af;
-  font-size: 0.9rem;
+#center #items #infos{
+    font-size: 0.9rem;
 }
 button {
     width: 7rem; 
@@ -218,11 +209,11 @@ button {
       padding-left: 1rem;
       font-weight: bold;
   }
-  #body  {
+  #center  {
       margin: 1rem;
       width: 95%;
   }
-  #body #container #right {
+  #center #container #right {
       margin: 1rem auto;
   }
 }
@@ -245,53 +236,54 @@ button {
   #title ul #item {
       padding-left: 2rem;
   }
-  #body  {
+  #center  {
       margin: 0 auto;
       width: 80%;
       padding-top: 2rem;
   }
-  #body #container {
+  #center #container {
     display: flex;
     flex-flow: row;
   }
-  #body #container #left {
+  #center #container #left {
       width: 80%;
       padding-right: 1rem;
   }
-  #body #container #right {
+  #center #container #right {
       flex: 1;
   }
-  #body #container #left #update {
+  #center #container #left #update {
     margin: 2rem auto;
   }
 }
 @media only screen and (min-width: 1000px) {
-  #show {
-      padding-top: 6rem;
-  }
-  img {
-      margin-left: 14vw;
-      width: 8rem;
-      height: 8rem;
-      border-radius: 50%;
-  }
-  #title ul {
-      margin-left: 12vw;
-  }
-  #title ul li{
-      display: inline-block;
-      font-weight: bold;
-      padding-left: 2rem;
-  }
+    #show {
+        padding-top: 6rem;
+    }
+    img {
+        margin-left: 13vw;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+    }
+    #title ul {
+        margin-left: 12vw;
+    }
+    #title ul li{
+        display: inline-block;
+        font-weight: bold;
+        padding-left: 2rem;
+    }
    main {
         margin: 1rem auto;
+        padding-bottom: 1rem;
         width: 72%;
     }
     #container {
       display: flex;
       flex-flow: row;
     }
-    #container #body {
+    #container #center {
         width: 80%;
         margin-right: 1rem;
     }

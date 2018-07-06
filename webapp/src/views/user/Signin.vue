@@ -1,9 +1,9 @@
 <template>
-  <div id="access">
+  <div id="signin">
       <!-- <mnav id="mnav"></mnav> -->
       <div id="content">
           <div id="title">    
-            <router-link to="/a/access">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
+            <router-link to="/a/signin">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
             <router-link to="/a/signup">Sign Up</router-link> 
           </div>
             <input type="text" name="username" placeholder="Username" v-model="Username" />
@@ -35,7 +35,7 @@ import URLprefix from '../../config'
 import  '../../../static/js/gVerify.js'
 import Mnav from '../../components/nav/Mnav'
 export default {
-  name: 'access',
+  name: 'signin',
   components: {
     "mnav": Mnav
   },

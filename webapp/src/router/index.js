@@ -13,9 +13,9 @@ import Theme from '../views/theme/Theme'
 import Blog from '../views/theme/Blog'
 import Post from '../views/new/Post'
 import Create from '../views/new/Create'
-import Access from '../views/user/Access'
+import Signin from '../views/user/Signin'
 import SignUp from '../views/user/SignUp'
-import Center from '../views/user/Center'
+import Hourse from '../views/user/Hourse'
 import Comment from '../views/user/Comment'
 import Save from '../views/user/Save'
 import Message from '../views/user/Message'
@@ -40,12 +40,12 @@ export default new Router({
     { path: '/a/:category/theme/:id', name: 'theme', component: Theme },
     { path: '/a/post', name: 'post', component: Post },
     { path: '/a/create', name: 'create', component: Create },
-    { path: '/a/access', name: 'access', component: Access },
+    { path: '/a/signin', name: 'signin', component: Signin },
     { path: '/a/signup', name: 'signup', component: SignUp },
-    { path: '/a/user/:id', name: 'user', component: Center },
-        { path: '/a/user/:id/comment', name: 'comment', component: Comment },
-        { path: '/a/user/:id/save', name: 'save', component: Save },
-        { path: '/a/user/:id/message', name: 'message', component: Message },
+    { path: '/a/user/:id', name: 'hourse', component: Hourse },
+        { path: '/a/user/:id/comment', name: 'usercomment', component: Comment },
+        { path: '/a/user/:id/save', name: 'usersave', component: Save },
+        { path: '/a/user/:id/message', name: 'usermessage', component: Message },
     { path: '/a/more', name: 'more', component: More },
     { path: '*', name: 'notfound', component: NotFound }
   ]

@@ -1,9 +1,9 @@
 <template>
- <div id="access">
+ <div id="signup">
    <!-- <mnav id="mnav"></mnav> -->
    <div id="content">
         <div id="title">    
-            <router-link to="/a/access">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
+            <router-link to="/a/signin">Sign In &emsp;&emsp;|&emsp;&emsp;</router-link>
             <router-link to="/a/signup">Sign Up</router-link> 
         </div> 
           <input type="text" name="username" placeholder="Username" v-model="Username"  required />
@@ -27,7 +27,7 @@
 import URLprefix from '../../config'
 import Mnav from '../../components/nav/Mnav'
 export default {
-  name: 'access',
+  name: 'signup',
   components: {
     "mnav": Mnav
   },
@@ -60,7 +60,7 @@ export default {
               }).then(response => response.json())
               .then(json => {
                   window.location.reload ( true )
-                  this.$router.push('/a/access')
+                  this.$router.push('/a/signin')
               })
               .catch((e) => {
                 console.log(e)

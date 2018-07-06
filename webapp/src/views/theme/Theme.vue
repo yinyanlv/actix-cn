@@ -38,7 +38,7 @@
                         </button>
                     </div>  
                     <div v-else style="margin: 10px;">Please login first and make a Comment.
-                        <a href="/a/access" style="background-color:aqua;">Login</a>
+                        <a href="/a/signin" style="background-color:aqua;">Login</a>
                     </div>    
                 </div>
                 <side></side>
