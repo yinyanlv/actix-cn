@@ -68,7 +68,7 @@ impl Handler<SigninUser> for ConnDsl {
                             status: 200,
                             token: token,
                             signin_user: the_user,
-                            message: "Succesfully signin.".to_string(),
+                            message: "登陆成功！ signin.".to_string(),
                         })
                     },
                     Err(_) => {
@@ -76,7 +76,7 @@ impl Handler<SigninUser> for ConnDsl {
                             status: 400,
                             token: "".to_owned(),
                             signin_user: no_user,
-                            message: "Incorrect Password.".to_string(),
+                            message: "密码错误，请重新输入.".to_string(),
                         })
                     },
                 }
@@ -86,7 +86,7 @@ impl Handler<SigninUser> for ConnDsl {
                     status: 400,
                     token: "".to_owned(),
                     signin_user: no_user,
-                    message: "Signin failure.".to_string(),
+                    message: "没有此用户，请核对用户名和密码.".to_string(),
                 })
             }
         }

@@ -5,22 +5,22 @@
           <div id="center">
               <div id="header">
                 <li  id="first"><a href="/a/home/best" >最美</a></li>
-                <li  ><a href="/a/home/blog" >博客</a></li>
                 <li  ><a href="/" >全部</a></li>
-                <li  ><a href="/a/home/faq" >问答</a></li>
-                <li  ><a href="/a/home/share" >分享</a></li>
-                <li  ><a href="/a/home/job" >招聘</a></li>
+                <span v-for="(category, index) in categorys" :key="index">
+                    <li v-if="category.category_name != 'office'">
+                      <a :href="'/a/home/' + category.category_name" >{{ category.category_name_cn }}</a>
+                    </li>
+                </span>
                 <li  ><a href="/a/home/care" >未回复</a></li>
               </div>
               <div id="content">
                       <div id="items" v-for="(theme, index) in theme_list" :key="index">
                             <div id="item">
                                 <span id="item-title">
-                                  <a v-if="$route.params.homecategory == 'blog' || $route.params.homecategory == 'best'" :href="'/a/blog/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
-                                  <a v-else :href="'/a/'+ $route.params.homecategory + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
+                                  <a :href="'/a/'+ theme.category_name + '/theme/' + theme.id" title="theme.title"> {{ theme.title }} </a>
                                 </span>
                                 <span id="right">
-                                    <span id="info" class="col-name">{{ category_name }}</span>
+                                    <span id="info" class="col-name">{{ theme.category_name_cn }}</span>
                                     <span id="info"><a :href="'/a/user/' + theme.user_id">{{ theme.username }}</a></span>
                                     <span id="info"><a :href="'/a/'+ theme.category_name + '/theme/' + theme.id">{{ theme.comment_count }}</a></span>
                                     <span id="info">{{ theme.view_count }}</span>
@@ -37,9 +37,9 @@
 
                             <li >••</li>
 
-                            <li v-if="(page_count/2 - 3) > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 - 3)">{{ page_count/2 - 3 }}</a></li>
-                            <li v-if="page_count/2 > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + page_count/2" >{{ page_count/2 }}</a></li>
-                            <li v-if="(page_count/2 + 3) < page_count" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (page_count/2 + 3)" >{{ page_count/2 + 3 }}</a></li>
+                            <li v-if="(half_count - 3) > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (half_count - 3)">{{ half_count - 3 }}</a></li>
+                            <li v-if="half_count > 2" ><a :href="'/a/home/' + $route.params.homecategory + '/' + half_count" >{{ half_count }}</a></li>
+                            <li v-if="(half_count + 3) < page_count" ><a :href="'/a/home/' + $route.params.homecategory + '/' + (half_count + 3)" >{{ half_count + 3 }}</a></li>
 
                             <li >••</li>
                             
@@ -67,15 +67,11 @@ export default {
       theme_list: '',
       signin_user: '',
       page_count: '',
-      category_name: ''
+      categorys: '',
+      half_count:''
     }
   },
   mounted: function() {
-       let name = this.$route.params.homecategory
-       if (name == 'blog') this.category_name = '博客'
-       if (name == 'faq') this.category_name = '问答'
-       if (name == 'share') this.category_name = '分享'
-       if (name == 'job') this.category_name = '招聘'
        let data = { 
          page_id: 1,
          category_name: this.$route.params.homecategory
@@ -89,9 +85,10 @@ export default {
                   mode: 'cors'
               }).then(response => response.json())
               .then(json => {
-                  this.theme_list = json.category_theme_list
-                  this.page_count = json.theme_category_page_count
-                  console.log(this.theme_list)
+                  this.theme_list = json.theme_list
+                  this.page_count = json.theme_page_count
+                  this.half_count = Math.ceil(json.theme_page_count/2)
+                  this.categorys = json.categorys
               })
               .catch((e) => {
                 console.log(e)

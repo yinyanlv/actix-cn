@@ -60,10 +60,10 @@ CREATE TABLE  categorys (
 
  INSERT INTO categorys (id, user_id, category_name, category_name_cn, created_at) VALUES
   (1, 1, 'office', '官方', '2017-09-08 13:00:26.353041'),
-  (2, 2, 'blog', '博客', '2017-09-08 13:00:28.353041'),
-  (3, 3, 'faq', '问答', '2017-09-08 13:00:38.353041'),
+  (2, 1, 'blog', '博客', '2017-09-08 13:00:28.353041'),
+  (3, 1, 'faq', '问答', '2017-09-08 13:00:38.353041'),
   (4, 1, 'share', '分享', '2017-09-08 13:00:26.353041'),
-  (5, 2, 'job', '招聘', '2017-09-08 13:00:28.353041');
+  (5, 1, 'job', '招聘', '2017-09-08 13:00:28.353041');
  SELECT setval('categorys_id_seq', 5, true);
 
 
@@ -90,7 +90,6 @@ CREATE TABLE  categorys (
   CREATE TABLE messages (
   id SERIAL NOT NULL PRIMARY KEY,
   theme_id INTEGER NOT NULL,
-  comment_id INTEGER NOT NULL,
   from_user_id INTEGER NOT NULL,
   to_user_id INTEGER NOT NULL,
   content TEXT NOT NULL,

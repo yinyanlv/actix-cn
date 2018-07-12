@@ -1,8 +1,8 @@
 <template>
     <div id="theme">
-        <main>
+        <main id="main">
             <div id="container">
-                <div id="body">
+                <div id="center">
                     <div id="theme">
                         <div id="title">
                             <h2> {{ theme.title }} </h2> 
@@ -14,11 +14,11 @@
                     </div>
                     <hr>
                     <div id="comment">
-                        <div id="count" style="font-weight: bold; color: #b93bf3;">Comment &nbsp; {{ theme.comment_count }} </div>
+                        <div id="count">Comment &nbsp; {{ theme.comment_count }} </div>
                         <div v-for="(comment, index) in theme_comments" :key="index">
                             <div id="detail">
                                 <div id="infos">
-                                    <span id="info" >{{ index + 1 }} </span>
+                                    <span id="info" >{{ index + 1 }}&nbsp;</span>
                                     <span id="info"><a :href="'/a/user/' + comment.user_id">{{ comment.username }}</a></span> • <span id="info">{{ comment.rtime }}</span>
                                 </div>
                                 <div id="content" v-html="comment.content" > </div>
@@ -27,14 +27,18 @@
                     </div>
                     <hr>
                     <div id="reply" v-if="signin_user">
-                        <div id="write"> Write comment in markdwon! </div>
-                        <textarea name="comment" v-model="Comment" placeholder="if you want @somebody for send a message in your comment, the rule is: 
-                        1: the @ symbol can't be first position at line.(like: @somebodyxxxxx)
-                        2: one position before the @ symbol can't be space(like: xxxxx @somebodyxxxxx)."></textarea><br>
-                        <button id="submit" @click="comment">Comment</button>
+                        <div id="editor">
+                            <mavon-editor name="content" v-model="Content" :ishljs = "true" style="height: 100%;" :toolbars="set"></mavon-editor>
+                        </div>
+                        <button style="margin-top: 1vh;
+                                        width:66px; 
+                                        line-height:25px;
+                                        background-color:#ffffff;
+                                        border :1px solid #a39c9c;" type="submit" id="submit" @click="comment">Comment
+                        </button>
                     </div>  
                     <div v-else style="margin: 10px;">Please login first and make a Comment.
-                        <a href="/a/access" style="background-color:aqua;">Login</a>
+                        <a href="/a/signin" style="background-color:aqua;">Login</a>
                     </div>    
                 </div>
                 <side></side>
@@ -45,26 +49,64 @@
 
 <script>
 /* eslint-disable */
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 import URLprefix from '../../config'
+import  '../../../static/css/github.min.css'
+import  '../../../static/js/highlight.min.js'
 import Side from '../../components/side/Side'
 export default {
     name: 'theme',
     components: {
-        "side": Side
+        "side": Side,
+         mavonEditor
     },
     data: function() {
         return {
-            Comment: '',
+            Content: '',
             theme: '',
             theme_user: '',
             theme_category_name: '',
             theme_category_name_cn: '',
             theme_rtime: '',
             theme_comments: '',
-            signin_user: ''
+            signin_user: '',
+            set:{
+                bold: true, // 粗体
+                italic: true, // 斜体
+                header: true, // 标题
+                underline: true, // 下划线
+                strikethrough: true, // 中划线
+                mark: true, // 标记
+                quote: true, // 引用
+                ol: true, // 有序列表
+                ul: true, // 无序列表
+                link: true, // 链接
+                code: true, // code
+                trash: true, // 清空
+                table: true, // 表格
+                fullscreen: true, // 全屏编辑
+                alignleft: true, // 左对齐
+                aligncenter: true, // 居中
+                alignright: true, // 右对齐
+                preview: true, // 预览
+                help: true, // 帮助
+
+                superscript: false, // 上角标
+                subscript: false, // 下角标
+                undo: false, // 上一步
+                redo: false, // 下一步
+                imagelink: false, // 图片链接
+                readmodel: false, // 沉浸式阅读
+                htmlcode: false, // 展示html源码
+                save: false, // 保存（触发events中的save事件）
+                navigation: false, // 导航目录
+                subfield: false, // 单双栏模式
+            }
         }
     },
     mounted: function() {
+        let md = mavonEditor.getMarkdownIt() 
         if (sessionStorage.getItem('signin_user')){
             this.signin_user = JSON.parse(sessionStorage.getItem('signin_user'))
         }
@@ -84,20 +126,23 @@ export default {
   },
   methods: {
     comment () {
-      let comment = this.Comment
-      let theme_id = this.$route.params.id
-      let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
-      let data = {
-          the_theme_id: theme_id,
-          user_id: user_id,
-          comment: comment
-      }
+        let comment = this.Content
+        let theme_id = this.$route.params.id
+        let user_id = JSON.parse(sessionStorage.getItem('signin_user')).id
+        let theme_user_id = this.theme_user.id
+        let data = {
+            theme_id: Number.parseInt(theme_id),
+            theme_user_id: Number.parseInt(theme_user_id),
+            user_id: Number.parseInt(user_id),
+            comment: comment
+        }
               fetch(URLprefix + 'api/theme/' + this.$route.params.id, {
                   body: JSON.stringify(data), 
                   headers: {
                     'content-type': 'application/json'
                   },
                   method: 'POST',
+                  mode: 'cors'
               }).then(response => response.json())
               .then(json => {
                   console.log(json)
@@ -111,93 +156,88 @@ export default {
 }
 </script>
 
-<style scoped>
-main {
+<style>
+#main {
     padding-bottom: 44px;
 }
-#body {
+#main #center {
     background-color: #ffffff;
 }
-a {
+#main a {
     color: #0541af;
 }
-#body #theme > #title {
+#main #center #theme, #main #center #comment, #main #center #reply {
+    border-top: 1px solid fuchsia;
+}
+#main #center #theme > #title {
     margin-top: 2px;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #theme > #title h2 { 
+#main #center #theme > #title h2 { 
     padding-bottom: 0.3rem;
 }
-#body #theme > #title #info {
+#main #center #theme > #title #info {
     display: inline-block;
     font-size: 14px;
 }
-#body #theme > #content {
+#main #center #theme > #content {
     margin: 10px;
 }
-hr {
+#main hr {
     height: 11px;
     background-color: #faf5f5;
     border: 0;
 }
-#body #comment > #count {
+#main #center #comment > #count {
+    font-weight: bold;
+    color: fuchsia;
     padding: 10px;
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail {
+#main #center #comment #detail {
     border-bottom: 1px solid rgb(223, 223, 223);
 }
-#body #comment #detail #infos{
+#main #center #comment #detail #infos{
     margin: 10px;
     margin-bottom: 10px;
 }
-#body #comment #detail #info{
+#main #center #comment #detail #info{
     display: inline-block;
     font-size: 14px;
 }
-#body #comment #detail #content {
+#main #center #comment #detail #content {
     margin: 10px;
 }
-#body #reply {
-    margin: 10px;
+#main #editor {
+    margin: auto;
+    height: 333px;
 }
-#body #reply #write {
-    margin-bottom: 10px;
-}
-#reply textarea {
-    width:100%; 
-    height: 200px;
-}
-#body #reply button {
-    width:66px; 
-    line-height:25px;
-    background-color:#ffffff;
-    border :1px solid #a39c9c;
-}
-pre {
+#main pre {
     display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 1.42857143;
+    padding: 8px;
+    margin: 5px 0;
+    font-size: 13.3px;
+    line-height: 1.5;
+    color: var(--purple);
     word-break: break-all;
     word-wrap: break-word;
-    background-color: #f8dff7;
-    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    border: 1px solid rgb(246, 226, 252);
     text-shadow: none;
-    overflow-x: auto;
-  }
-  
- code {
+}
+
+#main code {
     padding: 2px 4px;
-    background-color: #f8dff7;
+    font-size: 90%;
+    background-color: #f5f5f5;
     border-radius: 4px;
     border: 1px solid #ccc;
+    color: var(--purple);
     text-shadow: none;
-  }
-  
-pre code {
+}
+
+#main pre code {
     padding: 0;
     font-size: inherit;
     color: inherit;
@@ -205,37 +245,37 @@ pre code {
     background-color: transparent;
     border-radius: 0;
     border: 0;
-  }
+}
 @media only screen and (max-width: 600px) {
-    #body  {
+    #main #center  {
       margin: 0.5rem auto;
       width: 95%;
   }
 }
 @media only screen and (min-width: 600px) and (max-width: 1000px) {
-    main{
+    #main{
         padding-top: 77px;
     }
-    #body  {
+    #main #center  {
         margin: 0 auto;
         width: 72%;
   }
 }
 @media only screen and (min-width: 1000px) {
-    main {
+    #main {
         margin: 0 auto;
         width: 72%;
         padding-top: 77px;
     }
-    #container {
+    #main #container {
       display: flex;
       flex-flow: row;
     }
-    #container #body {
+    #main #container #center {
         width: 80%;
         margin-right: 1rem;
     }
-    #container #side {
+    #main #container #side {
         flex: 1;
     }
 }

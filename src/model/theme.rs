@@ -2,7 +2,7 @@ use actix::*;
 use actix_web::*;
 use chrono::{Utc, NaiveDateTime};
 use utils::schema::{themes, comments,saves};
-use model::response::{ThemeListMsgs, ThemePageListMsgs, ThemeAndCommentsMsgs, BlogLikeMsgs,Msgs};
+use model::response::{ThemePageListMsgs, ThemeAndCommentsMsgs, BlogLikeMsgs,Msgs};
 
 #[derive(Clone,Debug,Serialize,Deserialize,PartialEq,Queryable,QueryableByName)]
 #[table_name = "themes"]
@@ -75,13 +75,11 @@ pub struct ThemeId {
 
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemeComment {
+    pub theme_id: i32,
+    pub theme_user_id: i32,
     pub user_id: i32,
-    pub the_theme_id: String,
     pub comment: String,
 }
-
-#[derive(Deserialize,Serialize, Debug,Clone)]
-pub struct ThemeList;
 
 #[derive(Deserialize,Serialize, Debug,Clone)]
 pub struct ThemePageList {
@@ -110,6 +108,7 @@ pub struct ThemeListResult {
     pub comment_count: i32,
     pub created_at: NaiveDateTime,
     pub category_name: String,
+    pub category_name_cn: String,
     pub username: String,
     pub rtime: String,
 }
@@ -125,9 +124,6 @@ pub struct CommentReturn {
     pub rtime: String,
 }
 
-impl Message for ThemeList {
-    type Result = Result<ThemeListMsgs, Error>;
-}
 impl Message for ThemePageList {
     type Result = Result<ThemePageListMsgs, Error>;
 }
@@ -178,6 +174,7 @@ impl ThemeListResult {
             comment_count: 0,
             created_at: Utc::now().naive_utc(),
             category_name: "".to_string(),
+            category_name_cn: "".to_string(),
             username: "".to_string(),
             rtime: "".to_string(),
         }

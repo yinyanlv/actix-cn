@@ -16,10 +16,10 @@
           <li v-if="username"> 
             <a href="/a/post" title="post">post</a>
             <a :href="'/a/user/' + user_id" title="username">{{username}}</a>
-            <a href="/a/access" title="Logout" @click="logout">logout</a>
+            <a href="/a/signin" title="Logout" @click="logout">logout</a>
           </li>
           <li v-else > 
-            <router-link to="/a/access" title="access">access</router-link>
+            <router-link to="/a/signin" title="signin">signin</router-link>
           </li>
           <li> <router-link to="/a/more" title="more">more</router-link></li>
       </div> 
@@ -48,7 +48,7 @@ export default {
     logout() {
      sessionStorage.removeItem('token')
      sessionStorage.removeItem('signin_user')
-     this.$router.push('/a/access')
+     this.$router.push('/a/signin')
     }
   }
 }
